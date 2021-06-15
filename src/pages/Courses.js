@@ -19,13 +19,15 @@ function Courses() {
     let [courses,setCourses] = React.useState([]);
     
     useEffect(() => {
+        let coursesArray = [];
         db.collection("courses").get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 console.log(`${doc.id} => ${doc.data()}`);
-         
-                setCourses([...courses,doc.data()]);
+                coursesArray = [...coursesArray,doc.data()];
                 console.log('courses:'+courses)
             });
+            setCourses(coursesArray);
+
         });
     }, [])
 
