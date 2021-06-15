@@ -1,0 +1,10 @@
+.coursesWrapper{
+    padding: 10px;
+
+    display: flex;
+    flex-flow: column;
+}
+.coursesWrapper > div {
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
