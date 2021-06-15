@@ -8,8 +8,12 @@ import {
   ListItemText,
   Divider
 } from "@material-ui/core";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
+
+import HomeIcon from "@material-ui/icons/Home";
+import InfoIcon from '@material-ui/icons/Info';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
 import { Link } from 'react-router-dom';
 
 
@@ -41,19 +45,40 @@ class DrawerComponent extends React.Component {
          
             <ListItem button key={"Home"}>
               <Link to="/">
-                   Home
+                  <ListItemIcon><HomeIcon/></ListItemIcon> 
+              </Link>
+              <Link to="/">
+                  <ListItemText primary="Home"/>
               </Link>
             </ListItem>
             <ListItem button key={"About"}>
               <Link to="/about">
-                  About
-              </Link>
+                    <ListItemIcon><InfoIcon/></ListItemIcon> 
+                </Link>
+                <Link to="/about">
+                    <ListItemText primary="About"/>
+                </Link>
+            </ListItem>
+            <ListItem button key={"Courses"}>
+               <Link to="/courses">
+                    <ListItemIcon><MenuBookIcon/></ListItemIcon> 
+                </Link>
+                <Link to="/courses">
+                    <ListItemText primary="Courses"/>
+                </Link>
             </ListItem>
         
         </List>
         <Divider />
         <List>
-         
+            <ListItem button key={"Logout"}>
+                  <Link to="/logout">
+                        <ListItemIcon><ExitToAppIcon/></ListItemIcon> 
+                    </Link>
+                    <Link to="/logout">
+                        <ListItemText primary="LogOut"/>
+                    </Link>
+            </ListItem>
         </List>
       </div>
     );

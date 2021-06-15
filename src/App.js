@@ -2,10 +2,7 @@
 import React from 'react';
 import ToolbarComponent from "./components/Toolbar/Toolbar";
 import DrawerComponent from "./components/Drawer/Drawer";
-import Home from './pages/Home';
-import About from './pages/About';
-
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Routes from './Routes';
 
 
 class App extends React.Component {
@@ -29,22 +26,19 @@ class App extends React.Component {
   };
 
 
-   render(){
-     return (
+  render() {
+    return (
       <div className="App">
         <ToolbarComponent openDrawerHandler={this.openDrawer} />
         <DrawerComponent
           left={this.state.left}
           toggleDrawerHandler={this.toggleDrawer}
         />
-        <Switch>
-             <Route path='/' component={Home} />
-             <Route path='/about' component={About} />
-        </Switch>
+        <Routes/>
       </div>
     );
-    
-   }
+
+  }
 }
-  
+
 export default App;
