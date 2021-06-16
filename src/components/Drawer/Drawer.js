@@ -13,7 +13,7 @@ import HomeIcon from "@material-ui/icons/Home";
 import InfoIcon from '@material-ui/icons/Info';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-
+import {firebase} from '@firebase/app';
 import { Link } from 'react-router-dom';
 
 
@@ -42,43 +42,47 @@ class DrawerComponent extends React.Component {
         onKeyDown={this.props.toggleDrawerHandler}
       >
         <List>
-         
-            <ListItem button key={"Home"}>
-              <Link to="/">
-                  <ListItemIcon><HomeIcon/></ListItemIcon> 
-              </Link>
-              <Link to="/">
-                  <ListItemText primary="Home"/>
-              </Link>
-            </ListItem>
-            <ListItem button key={"About"}>
-              <Link to="/about">
-                    <ListItemIcon><InfoIcon/></ListItemIcon> 
-                </Link>
-                <Link to="/about">
-                    <ListItemText primary="About"/>
-                </Link>
-            </ListItem>
-            <ListItem button key={"Courses"}>
-               <Link to="/courses">
-                    <ListItemIcon><MenuBookIcon/></ListItemIcon> 
-                </Link>
-                <Link to="/courses">
-                    <ListItemText primary="Courses"/>
-                </Link>
-            </ListItem>
-        
+
+          <ListItem button key={"Home"}>
+            <Link to="/">
+              <ListItemIcon><HomeIcon /></ListItemIcon>
+            </Link>
+            <Link to="/">
+              <ListItemText primary="Home" />
+            </Link>
+          </ListItem>
+          <ListItem button key={"About"}>
+            <Link to="/about">
+              <ListItemIcon><InfoIcon /></ListItemIcon>
+            </Link>
+            <Link to="/about">
+              <ListItemText primary="About" />
+            </Link>
+          </ListItem>
+          <ListItem button key={"Courses"}>
+            <Link to="/courses">
+              <ListItemIcon><MenuBookIcon /></ListItemIcon>
+            </Link>
+            <Link to="/courses">
+              <ListItemText primary="Courses" />
+            </Link>
+          </ListItem>
+
         </List>
         <Divider />
         <List>
-            <ListItem button key={"Logout"}>
-                  <Link to="/logout">
-                        <ListItemIcon><ExitToAppIcon/></ListItemIcon> 
-                    </Link>
-                    <Link to="/logout">
-                        <ListItemText primary="LogOut"/>
-                    </Link>
-            </ListItem>
+          <ListItem button key={"Logout"}>
+              <a onClick={() => firebase.auth().signOut()}><ListItemIcon><ExitToAppIcon /></ListItemIcon> </a>
+              <a onClick={() => firebase.auth().signOut()}><ListItemText primary="LogOut" /></a>
+          </ListItem>
+          <ListItem button key={"LogIn"}>
+            <Link to="/login">
+              <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+            </Link>
+            <Link to="/login">
+              <ListItemText primary="LogIn" />
+            </Link>
+          </ListItem>
         </List>
       </div>
     );
