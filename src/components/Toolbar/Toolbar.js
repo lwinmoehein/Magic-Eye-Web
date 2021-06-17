@@ -15,6 +15,7 @@ import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { Link } from 'react-router-dom';
+import {firebase} from '@firebase/app';
 
 const styles = theme => ({
   grow: {
@@ -189,7 +190,9 @@ class ToolbarComponent extends React.Component {
          
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
-          
+              <Typography variant="h6" className={classes.title}>
+                 {firebase.auth().currentUser?firebase.auth().currentUser.phoneNumber:'no'}
+              </Typography>
             </div>
           
           </Toolbar>

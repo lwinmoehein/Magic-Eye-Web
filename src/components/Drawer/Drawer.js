@@ -31,6 +31,15 @@ class DrawerComponent extends React.Component {
     left: false
   };
 
+  signOut(){
+    let status = "logging out";
+    console.log(status);
+    firebase.auth().signOut().then(()=>{
+       status="logged out"
+       console.log(status);
+    });
+  }
+
   render() {
     const { classes } = this.props;
 
@@ -67,13 +76,16 @@ class DrawerComponent extends React.Component {
               <ListItemText primary="Courses" />
             </Link>
           </ListItem>
+          <ListItem button key={"Courses"} onClick={()=>this.props.toggleProgress()}>
+            clickme
+          </ListItem>
 
         </List>
         <Divider />
         <List>
           <ListItem button key={"Logout"}>
-              <a onClick={() => firebase.auth().signOut()}><ListItemIcon><ExitToAppIcon /></ListItemIcon> </a>
-              <a onClick={() => firebase.auth().signOut()}><ListItemText primary="LogOut" /></a>
+              <a onClick={() => this.signOut()}><ListItemIcon><ExitToAppIcon /></ListItemIcon> </a>
+              <a onClick={() => this.signOut()}><ListItemText primary="LogOut" /></a>
           </ListItem>
           <ListItem button key={"LogIn"}>
             <Link to="/login">

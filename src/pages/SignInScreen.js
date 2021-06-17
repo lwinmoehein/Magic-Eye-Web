@@ -2,10 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import {firebase} from '@firebase/app';
-import  '@firebase/auth';
+import '@firebase/auth';
 import FirebaseConfig from '../config/FirebaseConfig';
-import { useHistory } from "react-router-dom";
-import Home from './Home';
+import { Redirect } from "react-router-dom";
+
 
 if (!firebase.apps.length) {
   firebase.initializeApp(FirebaseConfig);
@@ -13,14 +13,17 @@ if (!firebase.apps.length) {
   firebase.app(); // if already initialized, use that one
 }
 
-
 // Configure FirebaseUI.
 const uiConfig = {
   // Popup signin flow rather than redirect flow.
   signInFlow: 'popup',
   // We will display Google and Facebook as auth providers.
   signInOptions: [
-    firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+    { 
+      provider:firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+      defaultCountry: 'MM',
+      loginHint:'09440883322'
+    }
   ],
   callbacks: {
     // Avoid redirects after sign-in.
@@ -29,9 +32,6 @@ const uiConfig = {
 };
 
 function SignInScreen() {
-  const history = useHistory();
-
-
   const [isSignedIn, setIsSignedIn] = useState(false); // Local signed-in state.
 
   // Listen to the Firebase Auth state and set the local state.
@@ -45,13 +45,13 @@ function SignInScreen() {
   if (!isSignedIn) {
     return (
       <div>
+        <h1>My App</h1>
+        <p>Please sign-in:</p>
         <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
       </div>
     );
   }
-  return (
-     <Home/>
-  );
+  return <Redirect to='/' />
 
 }
 

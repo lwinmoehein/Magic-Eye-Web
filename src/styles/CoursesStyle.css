@@ -4,6 +4,10 @@
     display: flex;
     flex-flow: column;
 }
+.courses {
+    position:relative;
+    height: 100%;
+}
 .coursesWrapper > div {
     margin-bottom: 10px;
     border-radius: 5px;

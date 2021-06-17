@@ -33,8 +33,10 @@ function Courses() {
 
 
     return (
-            <div className="coursesWrapper">
-                    {courses.map(course=>{return (<CourseItem key={course.id} item={course}/>)} )}
+            <div className="courses">
+                <div className="coursesWrapper">
+                        {courses.map(course=>{return (<CourseItem key={course.id} item={course}/>)} )}
+                </div>
             </div>
     )
 }
