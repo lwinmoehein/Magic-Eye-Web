@@ -4,52 +4,23 @@ import ToolbarComponent from "./components/Toolbar/Toolbar";
 import DrawerComponent from "./components/Drawer/Drawer";
 import ProgressBar from "./components/Reusables/ProgressBar";
 import Routes from './Routes';
-
+import { connect } from "react-redux";
+import {toggleDrawer,toggleProgress} from './actions/index';
 
 class App extends React.Component {
 
-  state = {
-    left: false,
-    showProgress:true,
-    progressText:'Loading...'
-  };
 
   constructor(props){
     super(props);
-    this.toggleProgress = this.toggleProgress.bind(this);
   }
-
-  toggleDrawer = () => {
-    // if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-    //   return;
-    // }
-
-    this.setState({ left: false });
-  };
-
-  openDrawer = () => {
-    this.setState({
-      left: true
-    });
-  };
-
-  toggleProgress(status='loading...'){
-    this.setState({showProgress:!this.state.showProgress,progressText:status});
-  }
-
-
-
 
   render() {
     return (
       <div className="App" style={{position:'relative',height:'100%'}}>
 
-        <ProgressBar isShown={this.state.showProgress}/>
-        <ToolbarComponent openDrawerHandler={this.openDrawer} />
+        <ProgressBar isShown={this.props.isProgressShown}/>
+        <ToolbarComponent openDrawerHandler={()=>toggleDrawer()} />
         <DrawerComponent
-          left={this.state.left}
-          toggleDrawerHandler={this.toggleDrawer}
-          toggleProgress={this.toggleProgress}
         />
         <Routes/>
       </div>
@@ -58,4 +29,10 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return { left: state.left,showProgress:state.showProgress,progressText:state.progressText };
+};
+
+// export default VisibilityFilters;
+export default connect(
+  mapStateToProps,{toggleDrawer,toggleProgress})(App);

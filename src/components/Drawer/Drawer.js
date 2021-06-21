@@ -15,6 +15,9 @@ import MenuBookIcon from '@material-ui/icons/MenuBook';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import {firebase} from '@firebase/app';
 import { Link } from 'react-router-dom';
+import {toggleProgress,toggleDrawer} from '../../actions';
+import { connect } from "react-redux";
+
 
 
 const styles = theme => ({
@@ -26,7 +29,7 @@ const styles = theme => ({
   }
 });
 
-class DrawerComponent extends React.Component {
+class DawerComponent extends React.Component {
   state = {
     left: false
   };
@@ -47,8 +50,8 @@ class DrawerComponent extends React.Component {
       <div
         className={classes.list}
         role="presentation"
-        onClick={this.props.toggleDrawerHandler}
-        onKeyDown={this.props.toggleDrawerHandler}
+        onClick={()=>toggleDrawer()}
+        onKeyDown={()=>toggleDrawer()}
       >
         <List>
 
@@ -76,8 +79,8 @@ class DrawerComponent extends React.Component {
               <ListItemText primary="Courses" />
             </Link>
           </ListItem>
-          <ListItem button key={"Courses"} onClick={()=>this.props.toggleProgress()}>
-            clickme
+          <ListItem button key={"Courses"} onClick={()=>toggleProgress()}>
+            toggleProgress
           </ListItem>
 
         </List>
@@ -100,11 +103,18 @@ class DrawerComponent extends React.Component {
     );
 
     return (
-      <Drawer open={this.props.left} onClose={this.props.toggleDrawerHandler}>
+      <Drawer open={this.props.left} onClose={()=>toggleDrawer()}>
         {sideList("left")}
       </Drawer>
     );
   }
 }
+const mapStateToProps = state => {
+  return { left: state.left,showProgress:state.showProgress,progressText:state.progressText };
+};
+
+// export default VisibilityFilters;
+const DrawerComponent = connect(
+  mapStateToProps,{toggleDrawer,toggleProgress})(DawerComponent);
 
 export default withStyles(styles)(DrawerComponent);
