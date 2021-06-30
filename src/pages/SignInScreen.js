@@ -36,18 +36,16 @@ const uiConfig = {
 function SignInScreen(props) {
   const [isSignedIn, setIsSignedIn] = useState(false); // Local signed-in state.
   
-  props.toggleProgress(true);
   // Listen to the Firebase Auth state and set the local state.
   useEffect(() => {
     const unregisterAuthObserver = firebase.auth().onAuthStateChanged(user => {
       setIsSignedIn(!!user);
       if(user){
         console.log('user:'+user.phoneNumber)
-        props.toggleProgress(false);
         props.storeUser(user);
         console.log(user);
       }
-      
+     
     });
     return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
   }, []);

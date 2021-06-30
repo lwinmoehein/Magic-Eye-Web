@@ -8,9 +8,11 @@ export function toggleDrawer(){
 }
 
 export function logOut(){
+    localStorage.setItem('user',null);
     return {type:LOG_OUT}
 }
 
 export function storeUser(payload){
+    localStorage.setItem('user',payload);
     return {type:STORE_USER,payload};
 }

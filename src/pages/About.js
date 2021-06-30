@@ -1,6 +1,9 @@
-import React from 'react'
+import {React,useEffect} from 'react'
+import { connect } from "react-redux"
+import {toggleProgress} from "../actions"
 
-function About() {
+function About(props) {
+   
     return (
         <div>
             this is about content,
@@ -8,5 +11,16 @@ function About() {
         </div>
     )
 }
+const mapStateToProps = state => {
+    return {user:state.app.user};
+  };
 
-export default About
+const mapDispatchToProps = (dispatch) => {
+    return {
+        toggleProgress: (payload) => dispatch(toggleProgress(payload)),
+    }
+}
+  
+export default connect(mapStateToProps,
+mapDispatchToProps)(About);
+

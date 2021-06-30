@@ -7,6 +7,7 @@ import  '@firebase/firestore'
 import {useEffect} from 'react'
 import { connect } from "react-redux";
 import { toggleProgress } from '../actions'
+import {fetchCourses} from '../actions/courseActions'
 
 if (!firebase.apps.length) {
    firebase.initializeApp(FirebaseConfig);
@@ -17,40 +18,32 @@ if (!firebase.apps.length) {
 let db = firebase.firestore();
 
 function Courses(props) {
-
-    let [courses,setCourses] = React.useState([]);
-    
+               
     useEffect(() => {
-        let coursesArray = [];
-        props.toggleProgress(true);
-        db.collection("courses").get().then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                console.log(`${doc.id} => ${doc.data()}`);
-                coursesArray = [...coursesArray,doc.data()];
-                console.log('courses:'+courses)
-            });
-            setCourses(coursesArray);
-            props.toggleProgress(false);
-        });
+        props.fetchCourses();
     }, [])
 
 
     return (
             <div className="courses">
                 <div className="coursesWrapper">
-                        {courses.map(course=>{return (<CourseItem key={course.id} item={course}/>)} )}
+                        {props.courses.map(course=>{return (<CourseItem key={course.id} item={course}/>)} )}
                 </div>
             </div>
     )
 }
 
 const mapStateToProps = state => {
-    return { isProgressShown:state.app.isProgressShown};
+    return { 
+        isProgressShown:state.app.isProgressShown,
+        courses:state.app.courses
+    };
 };
   
 const mapDispatchToProps = (dispatch) => {
     return {
         toggleProgress: (payload) => dispatch(toggleProgress(payload)),
+        fetchCourses:()=>dispatch(fetchCourses())
     }
 }
 

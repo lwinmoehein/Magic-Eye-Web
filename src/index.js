@@ -6,10 +6,12 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from 'react-redux';
 //import store from "./store";
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import combinedState from './store/app/app';
+// Import the `thunk` middleware
+import thunk from 'redux-thunk';
 
-const store=createStore(combinedState);
+const store=createStore(combinedState,applyMiddleware(thunk));
 
 ReactDOM.render(
   <React.StrictMode>

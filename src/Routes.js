@@ -4,17 +4,18 @@ import About from './pages/About'
 import Courses from './pages/Courses'
 import SignInScreen from './pages/SignInScreen'
 import { Route, Switch } from "react-router-dom"
+import ProtectedRoute from './components/Reusables/ProtectedRoute'
+import { connect } from "react-redux";
 
 
-function Routes() {
+function Routes(props) {
     return (
         <Switch>
             <Route path="/about">
                 <About />
             </Route>
-            <Route path="/courses">
-                <Courses />
-            </Route>
+            <ProtectedRoute exact path='/courses' user={props.user} component={Courses}>
+            </ProtectedRoute>
        
             <Route path="/login">
                 <SignInScreen />
@@ -26,4 +27,9 @@ function Routes() {
     )
 }
 
-export default Routes
+const mapStateToProps = state => {
+    return { user: state.app.user };
+};
+
+export default connect(
+    mapStateToProps)(Routes);  
