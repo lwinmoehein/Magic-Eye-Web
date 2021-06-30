@@ -13,10 +13,12 @@ import HomeIcon from "@material-ui/icons/Home";
 import InfoIcon from '@material-ui/icons/Info';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import {firebase} from '@firebase/app';
+import { firebase } from '@firebase/app';
 import { Link } from 'react-router-dom';
-import {toggleProgress,toggleDrawer} from '../../actions';
+import { toggleProgress, toggleDrawer, storeUser } from '../../actions';
 import { connect } from "react-redux";
+import { TOGGLE_DRAWER, TOGGLE_PROGRESS } from "../../constants/action-types";
+import '@firebase/auth';
 
 
 
@@ -29,18 +31,24 @@ const styles = theme => ({
   }
 });
 
-class DawerComponent extends React.Component {
-  state = {
-    left: false
-  };
+class DrawerComponent extends React.Component {
 
-  signOut(){
-    let status = "logging out";
-    console.log(status);
-    firebase.auth().signOut().then(()=>{
-       status="logged out"
-       console.log(status);
+  signOut() {
+    this.props.toggleProgress(true);
+    firebase.auth().signOut().then(() => {
+      this.props.toggleProgress(false);
     });
+  }
+
+  componentDidMount(){
+    const unregisterAuthObserver = firebase.auth().onAuthStateChanged(user => {
+      if(user){
+        console.log('user:'+user.phoneNumber)
+        this.props.storeUser(user);
+      }
+      this.props.storeUser(null);
+    });
+    return () => unregisterAuthObserver(); 
   }
 
   render() {
@@ -50,71 +58,66 @@ class DawerComponent extends React.Component {
       <div
         className={classes.list}
         role="presentation"
-        onClick={()=>toggleDrawer()}
-        onKeyDown={()=>toggleDrawer()}
+        onClick={() => this.props.toggleDrawer()}
+        onKeyDown={() => this.props.toggleDrawer()}
       >
         <List>
-
-          <ListItem button key={"Home"}>
-            <Link to="/">
-              <ListItemIcon><HomeIcon /></ListItemIcon>
-            </Link>
-            <Link to="/">
-              <ListItemText primary="Home" />
-            </Link>
-          </ListItem>
-          <ListItem button key={"About"}>
-            <Link to="/about">
-              <ListItemIcon><InfoIcon /></ListItemIcon>
-            </Link>
-            <Link to="/about">
-              <ListItemText primary="About" />
-            </Link>
-          </ListItem>
-          <ListItem button key={"Courses"}>
-            <Link to="/courses">
-              <ListItemIcon><MenuBookIcon /></ListItemIcon>
-            </Link>
-            <Link to="/courses">
-              <ListItemText primary="Courses" />
-            </Link>
-          </ListItem>
-          <ListItem button key={"Courses"} onClick={()=>toggleProgress()}>
-            toggleProgress
-          </ListItem>
-
+          <Link to="/">
+            <ListItem button key={"Home"}>
+                <ListItemIcon><HomeIcon /></ListItemIcon>
+                <ListItemText primary="Home" />
+            </ListItem>
+          </Link>
+          <Link to="/about">
+            <ListItem button key={"About"}>
+                <ListItemIcon><InfoIcon /></ListItemIcon>
+                <ListItemText primary="About" />
+            </ListItem>
+          </Link>
+          <Link to="/courses">
+            <ListItem button key={"Courses"}>
+                <ListItemIcon><MenuBookIcon /></ListItemIcon>
+                <ListItemText primary="Courses" />
+            </ListItem>
+          </Link>
         </List>
         <Divider />
         <List>
           <ListItem button key={"Logout"}>
-              <a onClick={() => this.signOut()}><ListItemIcon><ExitToAppIcon /></ListItemIcon> </a>
-              <a onClick={() => this.signOut()}><ListItemText primary="LogOut" /></a>
+            <a onClick={() => this.signOut()}><ListItemIcon><ExitToAppIcon /></ListItemIcon> </a>
+            <a onClick={() => this.signOut()}><ListItemText primary="LogOut" /></a>
           </ListItem>
-          <ListItem button key={"LogIn"}>
-            <Link to="/login">
-              <ListItemIcon><ExitToAppIcon /></ListItemIcon>
-            </Link>
-            <Link to="/login">
-              <ListItemText primary="LogIn" />
-            </Link>
-          </ListItem>
+          <Link to="/login">
+            <ListItem button key={"LogIn"}>    
+                <ListItemIcon><ExitToAppIcon /></ListItemIcon>      
+                <ListItemText primary="LogIn" />    
+            </ListItem>
+          </Link>
         </List>
       </div>
     );
 
     return (
-      <Drawer open={this.props.left} onClose={()=>toggleDrawer()}>
+      <Drawer open={this.props.isDrawerOpen} onClose={() => this.props.toggleDrawer()}>
         {sideList("left")}
       </Drawer>
     );
   }
 }
+
+
 const mapStateToProps = state => {
-  return { left: state.left,showProgress:state.showProgress,progressText:state.progressText };
+  return { isDrawerOpen: state.app.isDrawerOpen };
 };
 
-// export default VisibilityFilters;
-const DrawerComponent = connect(
-  mapStateToProps,{toggleDrawer,toggleProgress})(DawerComponent);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleDrawer: () => dispatch(toggleDrawer()),
+    toggleProgress: () => dispatch(toggleProgress()),
+    storeUser:(user)=>dispatch(storeUser(user)),
+  }
+}
 
-export default withStyles(styles)(DrawerComponent);
+export default withStyles(styles)(connect(
+  mapStateToProps, mapDispatchToProps)(DrawerComponent));
+

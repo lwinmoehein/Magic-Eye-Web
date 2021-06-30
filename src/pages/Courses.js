@@ -5,6 +5,8 @@ import FirebaseConfig from '../config/FirebaseConfig'
 import { firebase } from '@firebase/app'
 import  '@firebase/firestore'
 import {useEffect} from 'react'
+import { connect } from "react-redux";
+import { toggleProgress } from '../actions'
 
 if (!firebase.apps.length) {
    firebase.initializeApp(FirebaseConfig);
@@ -14,12 +16,13 @@ if (!firebase.apps.length) {
 
 let db = firebase.firestore();
 
-function Courses() {
+function Courses(props) {
 
     let [courses,setCourses] = React.useState([]);
     
     useEffect(() => {
         let coursesArray = [];
+        props.toggleProgress(true);
         db.collection("courses").get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 console.log(`${doc.id} => ${doc.data()}`);
@@ -27,7 +30,7 @@ function Courses() {
                 console.log('courses:'+courses)
             });
             setCourses(coursesArray);
-
+            props.toggleProgress(false);
         });
     }, [])
 
@@ -41,4 +44,16 @@ function Courses() {
     )
 }
 
-export default Courses
+const mapStateToProps = state => {
+    return { isProgressShown:state.app.isProgressShown};
+};
+  
+const mapDispatchToProps = (dispatch) => {
+    return {
+        toggleProgress: (payload) => dispatch(toggleProgress(payload)),
+    }
+}
+
+export default connect(
+mapStateToProps,mapDispatchToProps)(Courses);
+  

@@ -5,6 +5,8 @@ import {firebase} from '@firebase/app';
 import '@firebase/auth';
 import FirebaseConfig from '../config/FirebaseConfig';
 import { Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import { storeUser, toggleProgress } from '../actions'
 
 
 if (!firebase.apps.length) {
@@ -31,13 +33,21 @@ const uiConfig = {
   },
 };
 
-function SignInScreen() {
+function SignInScreen(props) {
   const [isSignedIn, setIsSignedIn] = useState(false); // Local signed-in state.
-
+  
+  props.toggleProgress(true);
   // Listen to the Firebase Auth state and set the local state.
   useEffect(() => {
     const unregisterAuthObserver = firebase.auth().onAuthStateChanged(user => {
       setIsSignedIn(!!user);
+      if(user){
+        console.log('user:'+user.phoneNumber)
+        props.toggleProgress(false);
+        props.storeUser(user);
+        console.log(user);
+      }
+      
     });
     return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
   }, []);
@@ -55,4 +65,17 @@ function SignInScreen() {
 
 }
 
-export default SignInScreen;
+const mapStateToProps = state => {
+  return { isProgressShown:state.app.isProgressShown};
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+      toggleProgress: (payload) => dispatch(toggleProgress(payload)),
+      storeUser:(payload)=>dispatch(storeUser(payload))
+  }
+}
+
+export default connect(
+mapStateToProps,mapDispatchToProps)(SignInScreen);
+

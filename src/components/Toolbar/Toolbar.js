@@ -15,8 +15,9 @@ import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { Link } from 'react-router-dom';
-import {firebase} from '@firebase/app';
-
+import { connect } from "react-redux";
+import {TOGGLE_DRAWER} from '../../constants/action-types';
+import firebase from '@firebase/app'
 const styles = theme => ({
   grow: {
     flexGrow: 1
@@ -180,7 +181,7 @@ class ToolbarComponent extends React.Component {
               className={classes.menuButton}
               color="inherit"
               aria-label="open drawer"
-              onClick={this.props.openDrawerHandler}
+              onClick={()=>this.props.toggleDrawer()}
             >
               <MenuIcon />
             </IconButton>
@@ -191,7 +192,7 @@ class ToolbarComponent extends React.Component {
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               <Typography variant="h6" className={classes.title}>
-                 {firebase.auth().currentUser?firebase.auth().currentUser.phoneNumber:'no'}
+                 {firebase.auth().currentUser?firebase.auth().currentUser.phoneNumber:'Not Logged In'}
               </Typography>
             </div>
           
@@ -204,4 +205,16 @@ class ToolbarComponent extends React.Component {
   }
 }
 
-export default withStyles(styles)(ToolbarComponent);
+const mapStateToProps = state => {
+  return { isDrawerOpen:state.app.isDrawerOpen,user:state.app.user };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleDrawer: () => dispatch({type:TOGGLE_DRAWER}),
+  }
+}
+
+export default withStyles(styles)(connect(
+  mapStateToProps,mapDispatchToProps)(ToolbarComponent));
+

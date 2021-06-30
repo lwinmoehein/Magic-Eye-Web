@@ -1,2 +1,4 @@
 export const TOGGLE_PROGRESS="TOGGLE_PROGRESS";
 export const TOGGLE_DRAWER="TOGGLE_DRAWER";
+export const LOG_OUT="LOG_OUT";
+export const STORE_USER="STORE_USER";

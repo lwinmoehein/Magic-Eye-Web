@@ -1,7 +1,12 @@
-import { TOGGLE_DRAWER, TOGGLE_PROGRESS } from "../constants/action-types";
+import { 
+    TOGGLE_DRAWER,
+    TOGGLE_PROGRESS,
+    LOG_OUT
+} from "../constants/action-types";
 
 const initialState = {
     isProgressShown: true,
+    progressText:'Loading...',
     left:false
 };
   

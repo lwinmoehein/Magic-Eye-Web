@@ -7,6 +7,7 @@ import Routes from './Routes';
 import { connect } from "react-redux";
 import {toggleDrawer,toggleProgress} from './actions/index';
 
+
 class App extends React.Component {
 
 
@@ -18,7 +19,7 @@ class App extends React.Component {
     return (
       <div className="App" style={{position:'relative',height:'100%'}}>
 
-        <ProgressBar isShown={this.props.isProgressShown}/>
+        <ProgressBar/>
         <ToolbarComponent openDrawerHandler={()=>toggleDrawer()} />
         <DrawerComponent
         />
@@ -30,9 +31,9 @@ class App extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return { left: state.left,showProgress:state.showProgress,progressText:state.progressText };
+  return { left: state.left,isProgressShown:state.isProgressShown};
 };
 
 // export default VisibilityFilters;
 export default connect(
-  mapStateToProps,{toggleDrawer,toggleProgress})(App);
+  mapStateToProps)(App);
