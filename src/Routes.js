@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Courses from "./pages/Courses";
 import CourseContents from "./pages/CourseContents";
+import CourseContentDetail from "./pages/CourseContentDetail";
 import SignInScreen from "./pages/SignInScreen";
 import { Route, Switch } from "react-router-dom";
 import ProtectedRoute from "./components/Reusables/ProtectedRoute";
@@ -22,9 +23,15 @@ function Routes(props) {
       ></ProtectedRoute>
       <ProtectedRoute
         exact
-        path="/courseData"
+        path="/courseContent"
         user={props.user}
         component={CourseContents}
+      ></ProtectedRoute>
+      <ProtectedRoute
+        exact
+        path="/courseContentDetail"
+        user={props.user}
+        component={CourseContentDetail}
       ></ProtectedRoute>
 
       <Route path="/login">

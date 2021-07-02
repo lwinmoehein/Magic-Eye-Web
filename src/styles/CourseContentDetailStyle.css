@@ -1,0 +1,25 @@
+.courseContentWrapper {
+  padding: 10px;
+
+  display: flex;
+  flex-flow: column;
+}
+.courseContents {
+  position: relative;
+  height: 100%;
+}
+.courseContentWrapper > div {
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+@media screen and (min-width: 800px) {
+  .coursesWrapper {
+    display: flex;
+    flex-flow: row;
+  }
+  .courseContentWrapper > div {
+    min-width: 150px;
+    min-height: 150px;
+    margin: 10px;
+  }
+}

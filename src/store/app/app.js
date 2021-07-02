@@ -12,6 +12,10 @@ import {
   FETCH_COURSES_FAILURE,
   CLEAR_COURSES,
   SET_SELECTED_COURSE,
+  SET_SELECTED_COURSE_CONTENT,
+  FETCH_COURSE_CONTENTS_BEGIN,
+  FETCH_COURSE_CONTENTS_SUCCESS,
+  FETCH_COURSE_CONTENTS_FAILURE,
 } from "../../constants/action-types";
 
 const defaultAppState = {
@@ -20,7 +24,9 @@ const defaultAppState = {
   progressText: "Loading..",
   isDrawerOpen: false,
   courses: [],
+  courseContents: [],
   selectedCourse: null,
+  selectedCourseContent: null,
 };
 
 function app(state = defaultAppState, action) {
@@ -69,6 +75,24 @@ function app(state = defaultAppState, action) {
         isProgressShown: false,
         courses: [],
       };
+    case FETCH_COURSE_CONTENTS_BEGIN:
+      return {
+        ...state,
+        isProgressShown: true,
+        progressText: "Fetching Course Contents",
+      };
+    case FETCH_COURSE_CONTENTS_SUCCESS:
+      return {
+        ...state,
+        isProgressShown: false,
+        courseContents: action.payload.courseContents,
+      };
+    case FETCH_COURSE_CONTENTS_FAILURE:
+      return {
+        ...state,
+        isProgressShown: false,
+        courseContents: [],
+      };
     case CLEAR_COURSES:
       return {
         ...state,
@@ -79,6 +103,13 @@ function app(state = defaultAppState, action) {
         ...state,
         selectedCourse: action.payload.selectedCourse,
       };
+
+    case SET_SELECTED_COURSE_CONTENT:
+      return {
+        ...state,
+        selectedCourseContent: action.payload.selectedCourseContent,
+      };
+
     default:
       return state;
   }

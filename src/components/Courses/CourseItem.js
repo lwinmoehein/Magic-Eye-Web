@@ -9,7 +9,7 @@ function CourseItem(props) {
   const history = useHistory();
 
   function onCourseSelected() {
-    history.push("/courseData");
+    history.push("/courseContent");
     props.setSelectedCourse(props.item);
   }
   return (
