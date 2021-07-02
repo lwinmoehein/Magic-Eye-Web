@@ -1,43 +1,52 @@
 import { combineReducers } from 'redux';
-import {firebase} from '@firebase/app';
+import { firebase } from '@firebase/app';
+import '@firebase/auth';
+
 
 import {
-    TOGGLE_PROGRESS,TOGGLE_DRAWER,
-    LOG_OUT,STORE_USER,
-    FETCH_COURSES_BEGIN,FETCH_COURSES_SUCCESS,FETCH_COURSES_FAILURE
+    TOGGLE_PROGRESS,
+    TOGGLE_DRAWER,
+    LOG_OUT,
+    STORE_USER,
+    FETCH_COURSES_BEGIN,
+    FETCH_COURSES_SUCCESS,
+    FETCH_COURSES_FAILURE,
+    CLEAR_COURSES
 } from '../../constants/action-types';
 
 const defaultAppState = {
-    user:localStorage.getItem('user')??'null',
-    isProgressShown:false,
-    progressText:'Loading..',
-    isDrawerOpen:false,
-    courses:[]
+    user:  JSON.parse(localStorage.getItem('user')),
+    isProgressShown: false,
+    progressText: 'Loading..',
+    isDrawerOpen: false,
+    courses: []
 }
 
-function app(state=defaultAppState, action) {
-    switch(action.type){
+function app(state = defaultAppState, action) {
+    switch (action.type) {
         case TOGGLE_PROGRESS:
             return {
                 ...state,
-                isProgressShown:action.payload?action.payload:false,
-                progressText:action.payload??defaultAppState.progressText
+                isProgressShown: action.payload ? action.payload : false,
+                progressText: action.payload ? action.payload : defaultAppState.progressText
             };
         case TOGGLE_DRAWER:
             return {
                 ...state,
-                isDrawerOpen:!state.isDrawerOpen
+                isDrawerOpen: !state.isDrawerOpen
             }
-         
+
         case LOG_OUT:
             return {
                 ...state,
-                user:firebase.auth().logout(),
+                user: null,
             }
         case STORE_USER:
+            console.log("storing user:" + action.payload.phoneNumber);
+
             return {
                 ...state,
-                user:action.payload,
+                user: action.payload,
             }
         case FETCH_COURSES_BEGIN:
             return {
@@ -49,14 +58,19 @@ function app(state=defaultAppState, action) {
             return {
                 ...state,
                 isProgressShown: false,
-                courses: action.payload.courses
+                courses: [...state.courses, action.payload.courses]
             };
         case FETCH_COURSES_FAILURE:
             return {
                 ...state,
                 isProgressShown: false,
                 courses: []
-              };
+            };
+        case CLEAR_COURSES:
+            return {
+                ...state,
+                courses: []
+            }
         default:
             return state;
     }
@@ -65,5 +79,5 @@ function app(state=defaultAppState, action) {
 const combinedState = combineReducers({
     app
 });
-  
+
 export default combinedState;

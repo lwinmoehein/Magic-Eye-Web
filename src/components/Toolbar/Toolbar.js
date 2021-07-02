@@ -192,7 +192,7 @@ class ToolbarComponent extends React.Component {
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               <Typography variant="h6" className={classes.title}>
-                 {firebase.auth().currentUser?firebase.auth().currentUser.phoneNumber:'Not Logged In'}
+                 {this.props.user?this.props.user.phoneNumber:'Not Logged In'}
               </Typography>
             </div>
           

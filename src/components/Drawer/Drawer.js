@@ -6,55 +6,45 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Divider
+  Divider,
 } from "@material-ui/core";
 
 import HomeIcon from "@material-ui/icons/Home";
-import InfoIcon from '@material-ui/icons/Info';
-import MenuBookIcon from '@material-ui/icons/MenuBook';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { firebase } from '@firebase/app';
-import { Link } from 'react-router-dom';
-import { toggleProgress, toggleDrawer, storeUser } from '../../actions';
+import InfoIcon from "@material-ui/icons/Info";
+import MenuBookIcon from "@material-ui/icons/MenuBook";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import { firebase } from "@firebase/app";
+import { Link } from "react-router-dom";
+import { toggleProgress, toggleDrawer, storeUser, logOut } from "../../actions";
 import { connect } from "react-redux";
 import { TOGGLE_DRAWER, TOGGLE_PROGRESS } from "../../constants/action-types";
-import '@firebase/auth';
+import "@firebase/auth";
 
-
-
-const styles = theme => ({
+const styles = (theme) => ({
   list: {
-    width: 250
+    width: 250,
   },
   fullList: {
-    width: "auto"
-  }
+    width: "auto",
+  },
 });
 
 class DrawerComponent extends React.Component {
-
-  signOut() {
-    this.props.toggleProgress(true);
-    firebase.auth().signOut().then(() => {
-      this.props.toggleProgress(false);
-    });
-  }
-
-  componentDidMount(){
-    const unregisterAuthObserver = firebase.auth().onAuthStateChanged(user => {
-      if(user){
-        console.log('user:'+user.phoneNumber)
-        this.props.storeUser(user);
-      }
-      this.props.storeUser(null);
-    });
-    return () => unregisterAuthObserver(); 
+  componentDidMount() {
+    const unregisterAuthObserver = firebase
+      .auth()
+      .onAuthStateChanged((user) => {
+        if (!user) {
+          this.props.storeUser(null);
+        }
+      });
+    return () => unregisterAuthObserver();
   }
 
   render() {
     const { classes } = this.props;
 
-    const sideList = side => (
+    const sideList = (side) => (
       <div
         className={classes.list}
         role="presentation"
@@ -64,60 +54,84 @@ class DrawerComponent extends React.Component {
         <List>
           <Link to="/">
             <ListItem button key={"Home"}>
-                <ListItemIcon><HomeIcon /></ListItemIcon>
-                <ListItemText primary="Home" />
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <ListItemText primary="Home" />
             </ListItem>
           </Link>
           <Link to="/about">
             <ListItem button key={"About"}>
-                <ListItemIcon><InfoIcon /></ListItemIcon>
-                <ListItemText primary="About" />
+              <ListItemIcon>
+                <InfoIcon />
+              </ListItemIcon>
+              <ListItemText primary="About" />
             </ListItem>
           </Link>
-          <Link to="/courses">
-            <ListItem button key={"Courses"}>
-                <ListItemIcon><MenuBookIcon /></ListItemIcon>
+          {this.props.user && (
+            <Link to="/courses">
+              <ListItem button key={"Courses"}>
+                <ListItemIcon>
+                  <MenuBookIcon />
+                </ListItemIcon>
                 <ListItemText primary="Courses" />
-            </ListItem>
-          </Link>
+              </ListItem>
+            </Link>
+          )}
         </List>
         <Divider />
         <List>
-          <ListItem button key={"Logout"}>
-            <a onClick={() => this.signOut()}><ListItemIcon><ExitToAppIcon /></ListItemIcon> </a>
-            <a onClick={() => this.signOut()}><ListItemText primary="LogOut" /></a>
-          </ListItem>
-          <Link to="/login">
-            <ListItem button key={"LogIn"}>    
-                <ListItemIcon><ExitToAppIcon /></ListItemIcon>      
-                <ListItemText primary="LogIn" />    
+          {this.props.user && (
+            <ListItem button key={"Logout"}>
+              <a onClick={() => this.props.signOut()}>
+                <ListItemIcon>
+                  <ExitToAppIcon />
+                </ListItemIcon>{" "}
+              </a>
+              <a onClick={() => this.props.signOut()}>
+                <ListItemText primary="LogOut" />
+              </a>
             </ListItem>
-          </Link>
+          )}
+
+          {!this.props.user && (
+            <Link to="/login">
+              <ListItem button key={"LogIn"}>
+                <ListItemIcon>
+                  <ExitToAppIcon />
+                </ListItemIcon>
+                <ListItemText primary="LogIn" />
+              </ListItem>
+            </Link>
+          )}
         </List>
       </div>
     );
 
     return (
-      <Drawer open={this.props.isDrawerOpen} onClose={() => this.props.toggleDrawer()}>
+      <Drawer
+        open={this.props.isDrawerOpen}
+        onClose={() => this.props.toggleDrawer()}
+      >
         {sideList("left")}
       </Drawer>
     );
   }
 }
 
-
-const mapStateToProps = state => {
-  return { isDrawerOpen: state.app.isDrawerOpen };
+const mapStateToProps = (state) => {
+  return { isDrawerOpen: state.app.isDrawerOpen, user: state.app.user };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     toggleDrawer: () => dispatch(toggleDrawer()),
     toggleProgress: () => dispatch(toggleProgress()),
-    storeUser:(user)=>dispatch(storeUser(user)),
-  }
-}
+    storeUser: (user) => dispatch(storeUser(user)),
+    signOut: () => dispatch(logOut()),
+  };
+};
 
-export default withStyles(styles)(connect(
-  mapStateToProps, mapDispatchToProps)(DrawerComponent));
-
+export default withStyles(styles)(
+  connect(mapStateToProps, mapDispatchToProps)(DrawerComponent)
+);
