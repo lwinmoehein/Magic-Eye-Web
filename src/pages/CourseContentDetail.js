@@ -1,13 +1,26 @@
 import React from "react";
 import "../styles/CourseContentDetailStyle.css";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 function CourseContentDetail(props) {
   return (
     <div className="courseContentWrapper">
-      <div>Videos</div>
-      <div>PDFs</div>
-      <div>Links</div>
+      <div>
+        <div>
+          <Link to="/videos">Videos</Link>
+        </div>
+      </div>
+      <div>
+        <div>
+          <Link to="/pdfs">PDFs</Link>
+        </div>
+      </div>
+      <div>
+        <div>
+          <Link to="/links">Links</Link>
+        </div>
+      </div>
     </div>
   );
 }

@@ -9,17 +9,28 @@
   height: 100%;
 }
 .courseContentWrapper > div {
+  display: flex;
+  font-weight: bolder;
+  color: black;
   margin-bottom: 10px;
   border-radius: 5px;
+  padding: 1em;
+  flex: 1;
+  min-height: 100px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 @media screen and (min-width: 800px) {
-  .coursesWrapper {
+  .courseContentWrapper {
     display: flex;
     flex-flow: row;
   }
   .courseContentWrapper > div {
-    min-width: 150px;
+    max-width: 200px;
     min-height: 150px;
     margin: 10px;
+    padding: 1em;
   }
 }
