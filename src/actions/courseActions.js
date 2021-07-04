@@ -5,9 +5,15 @@ import {
   FETCH_COURSE_CONTENTS_BEGIN,
   FETCH_COURSE_CONTENTS_SUCCESS,
   FETCH_COURSE_CONTENTS_FAILURE,
+  FETCH_VIDEOS_BEGIN,
+  FETCH_VIDEOS_SUCCESS,
+  FETCH_VIDEOS_FAILURE,
   CLEAR_COURSES,
   SET_SELECTED_COURSE,
   SET_SELECTED_COURSE_CONTENT,
+  SET_SELECTED_VIDEO,
+  SET_SELECTED_PDF,
+  SET_SELECTED_LINK,
 } from "../constants/action-types";
 import FirebaseConfig from "../config/FirebaseConfig";
 import { firebase } from "@firebase/app";
@@ -51,6 +57,23 @@ export const fetchCourseContentsFailure = (error) => ({
   payload: { error },
 });
 
+//videos
+
+//COURSE CONTENTS
+export const fetchVideosBegin = () => ({
+  type: FETCH_VIDEOS_BEGIN,
+});
+
+export const fetchVideosSuccess = (videos) => ({
+  type: FETCH_VIDEOS_SUCCESS,
+  payload: videos,
+});
+
+export const fetchVideosFailure = (error) => ({
+  type: FETCH_VIDEOS_FAILURE,
+  payload: { error },
+});
+
 export const clearCourses = () => ({
   type: CLEAR_COURSES,
   payload: null,
@@ -64,6 +87,19 @@ export const setSelectedCourse = (course) => ({
 export const setSelectedCourseContent = (courseContent) => ({
   type: SET_SELECTED_COURSE_CONTENT,
   payload: { selectedCourseContent: courseContent },
+});
+
+export const setSelectedVideo = (video) => ({
+  type: SET_SELECTED_VIDEO,
+  payload: { selectedVideo: video },
+});
+export const setSelectedPDF = (pdf) => ({
+  type: SET_SELECTED_PDF,
+  payload: { selectedPDF: pdf },
+});
+export const setSelectedLink = (link) => ({
+  type: SET_SELECTED_LINK,
+  payload: { selectedLink: link },
 });
 
 //apis
@@ -88,7 +124,17 @@ function getCourseContentsAPI(courseId) {
     .get();
   return courseContentRef;
 }
+function fetchVideosAPI(courseId, courseContentId) {
+  console.log("content:", courseContentId, "course", courseId);
+  let videosRef = db
+    .collection("VideoByContent")
+    .doc(courseId)
+    .collection(courseContentId)
+    .get();
 
+  return videosRef;
+}
+//course contents
 export function fetchCourseContents(courseId) {
   console.log("fetching course contents:=>", courseId);
   return (dispatch, getState) => {
@@ -98,9 +144,27 @@ export function fetchCourseContents(courseId) {
       .then((querySnapshot) => {
         dispatch(
           fetchCourseContentsSuccess(
-            querySnapshot.docs.map((doc) => doc.data())
+            querySnapshot.docs.map((doc) => {
+              return { ...doc.data(), id: doc.id };
+            })
           )
         );
+      })
+      .catch((error) => dispatch(fetchCourseContentsFailure()));
+  };
+}
+//videos
+export function fetchVideos(payload) {
+  console.log("fetching videos:=>", payload.courseId, ",", payload.contentId);
+  return (dispatch, getState) => {
+    dispatch(fetchVideosBegin());
+    return fetchVideosAPI(payload.courseId, payload.contentId)
+      .then((querySnapshot) => {
+        let payload = querySnapshot.docs.map((doc) => {
+          return { ...doc.data(), id: doc.id };
+        });
+        console.log("video:", payload);
+        dispatch(fetchVideosSuccess(payload));
       })
       .catch((error) => dispatch(fetchCourseContentsFailure()));
   };

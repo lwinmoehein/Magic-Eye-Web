@@ -7,19 +7,13 @@ function CourseContentDetail(props) {
   return (
     <div className="courseContentWrapper">
       <div>
-        <div>
-          <Link to="/videos">Videos</Link>
-        </div>
+        <Link to="/videos">Videos</Link>
       </div>
       <div>
-        <div>
-          <Link to="/pdfs">PDFs</Link>
-        </div>
+        <Link to="/pdfs">PDFs</Link>
       </div>
       <div>
-        <div>
-          <Link to="/links">Links</Link>
-        </div>
+        <Link to="/links">Links</Link>
       </div>
     </div>
   );

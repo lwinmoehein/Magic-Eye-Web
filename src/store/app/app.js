@@ -16,6 +16,12 @@ import {
   FETCH_COURSE_CONTENTS_BEGIN,
   FETCH_COURSE_CONTENTS_SUCCESS,
   FETCH_COURSE_CONTENTS_FAILURE,
+  FETCH_VIDEOS_BEGIN,
+  FETCH_VIDEOS_SUCCESS,
+  FETCH_VIDEOS_FAILURE,
+  SET_SELECTED_VIDEO,
+  SET_SELECTED_PDF,
+  SET_SELECTED_LINK,
 } from "../../constants/action-types";
 
 const defaultAppState = {
@@ -27,6 +33,10 @@ const defaultAppState = {
   courseContents: [],
   selectedCourse: null,
   selectedCourseContent: null,
+  selectedVideo: null,
+  selectedPDF: null,
+  selectedLink: null,
+  videos: [],
 };
 
 function app(state = defaultAppState, action) {
@@ -93,6 +103,25 @@ function app(state = defaultAppState, action) {
         isProgressShown: false,
         courseContents: [],
       };
+    case FETCH_VIDEOS_BEGIN:
+      return {
+        ...state,
+        isProgressShown: true,
+        progressText: "Fetching Videos",
+        videos: [],
+      };
+    case FETCH_VIDEOS_SUCCESS:
+      return {
+        ...state,
+        isProgressShown: false,
+        videos: action.payload,
+      };
+    case FETCH_VIDEOS_FAILURE:
+      return {
+        ...state,
+        isProgressShown: false,
+        videos: [],
+      };
     case CLEAR_COURSES:
       return {
         ...state,
@@ -108,6 +137,22 @@ function app(state = defaultAppState, action) {
       return {
         ...state,
         selectedCourseContent: action.payload.selectedCourseContent,
+      };
+    case SET_SELECTED_VIDEO:
+      return {
+        ...state,
+        selectedVideo: action.payload.selectedVideo,
+      };
+    case SET_SELECTED_PDF:
+      return {
+        ...state,
+        selectedPDF: action.payload.selectedPDF,
+      };
+
+    case SET_SELECTED_LINK:
+      return {
+        ...state,
+        selectedLink: action.payload.selectedLink,
       };
 
     default:
