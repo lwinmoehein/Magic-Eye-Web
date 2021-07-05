@@ -19,9 +19,12 @@ import { connect } from "react-redux";
 function Routes(props) {
   return (
     <Switch>
-      <Route path="/about">
-        <About />
-      </Route>
+      <ProtectedRoute
+        exact
+        path="/about"
+        user={props.user}
+        component={About}
+      ></ProtectedRoute>
       <ProtectedRoute
         exact
         path="/courses"
@@ -86,9 +89,12 @@ function Routes(props) {
       <Route path="/login">
         <SignInScreen />
       </Route>
-      <Route path="/">
-        <Courses />
-      </Route>
+      <ProtectedRoute
+        exact
+        path="/"
+        user={props.user}
+        component={Courses}
+      ></ProtectedRoute>
     </Switch>
   );
 }

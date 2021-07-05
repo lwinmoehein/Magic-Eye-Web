@@ -10,7 +10,6 @@ import { createStore, applyMiddleware } from "redux";
 import combinedState from "./store/app/app";
 // Import the `thunk` middleware
 import thunk from "redux-thunk";
-import { MemoryRouter } from "react-router";
 
 const store = createStore(combinedState, applyMiddleware(thunk));
 

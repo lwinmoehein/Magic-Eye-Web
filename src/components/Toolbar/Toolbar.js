@@ -1,3 +1,4 @@
+import "../../styles/ToolbarStyle.css";
 import React from "react";
 import { fade, makeStyles, withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -18,6 +19,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { TOGGLE_DRAWER } from "../../constants/action-types";
 import firebase from "@firebase/app";
+import User from "../../components/Reusables/User";
 const styles = (theme) => ({
   grow: {
     flexGrow: 1,
@@ -128,15 +130,13 @@ class ToolbarComponent extends React.Component {
               <MenuIcon />
             </IconButton>
             <Typography className={classes.title} variant="h6" noWrap>
-              Magic Eye Computer (Pakokku)
+              <span className="whiteText">Magic Eye Computer (Pakokku)</span>
             </Typography>
 
             <div className={classes.grow} />
             <div>
               <Typography variant="h6">
-                {this.props.user
-                  ? this.props.user.phoneNumber
-                  : "Not Logged In"}
+                <User className="whiteText" />
               </Typography>
             </div>
             {/* <div className={classes.sectionMobile}>

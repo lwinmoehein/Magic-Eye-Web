@@ -1,6 +1,7 @@
 import "../styles/ViewPDFStyle.css";
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
+import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { Document, Page } from "react-pdf";
 import { pdfjs } from "react-pdf";
@@ -15,12 +16,15 @@ function ViewPDF(props) {
   const [pageNumber, setPageNumber] = useState(1);
 
   useEffect(() => {
+    if (!props.pdf) return;
     props.setDownloadUrl(props.pdf.url);
   }, []);
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
   }
+
+  if (!props.pdf) return <Redirect to="/" />;
 
   const PDFDocumentWrapper = styled.div`
     canvas {

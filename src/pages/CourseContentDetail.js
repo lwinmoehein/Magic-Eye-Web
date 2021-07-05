@@ -1,20 +1,23 @@
 import React from "react";
 import "../styles/CourseContentDetailStyle.css";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 function CourseContentDetail(props) {
+  if (!props.selectedCourseContent) return <Redirect to="/" />;
   return (
     <div className="courseContentWrapper">
-      <div>
-        <Link to="/videos">Videos</Link>
-      </div>
-      <div>
-        <Link to="/pdfs">PDFs</Link>
-      </div>
-      <div>
-        <Link to="/links">Links</Link>
-      </div>
+      <Link className="contentType" to="/videos">
+        Videos
+      </Link>
+
+      <Link className="contentType" to="/pdfs">
+        PDFs
+      </Link>
+
+      <Link className="contentType" to="/links">
+        Links
+      </Link>
     </div>
   );
 }

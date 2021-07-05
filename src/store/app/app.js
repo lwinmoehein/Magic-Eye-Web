@@ -32,10 +32,14 @@ import {
   SET_SELECTED_PDF,
   SET_SELECTED_LINK,
   SET_DOWNLOAD_URL,
+  FETCH_USER_INFO_BEGIN,
+  FETCH_USER_INFO_SUCCESS,
+  FETCH_USER_INFO_FAILURE,
 } from "../../constants/action-types";
 
 const defaultAppState = {
   user: JSON.parse(localStorage.getItem("user")),
+  userInfo: {},
   isProgressShown: false,
   progressText: "Loading..",
   isDrawerOpen: false,
@@ -191,6 +195,21 @@ function app(state = defaultAppState, action) {
         ...state,
         isProgressShown: false,
         links: [],
+      };
+    case FETCH_USER_INFO_BEGIN:
+      return {
+        ...state,
+        userInfo: {},
+      };
+    case FETCH_USER_INFO_SUCCESS:
+      return {
+        ...state,
+        userInfo: action.payload,
+      };
+    case FETCH_USER_INFO_FAILURE:
+      return {
+        ...state,
+        userInfo: {},
       };
     case CLEAR_COURSES:
       return {

@@ -23,6 +23,9 @@ import {
   FETCH_CATALOGS_BEGIN,
   FETCH_CATALOGS_SUCCESS,
   FETCH_CATALOGS_FAILURE,
+  FETCH_USER_INFO_BEGIN,
+  FETCH_USER_INFO_SUCCESS,
+  FETCH_USER_INFO_FAILURE,
 } from "../constants/action-types";
 import FirebaseConfig from "../config/FirebaseConfig";
 import { firebase } from "@firebase/app";
@@ -124,6 +127,20 @@ export const fetchLinksFailure = (error) => ({
   type: FETCH_LINKS_FAILURE,
   payload: { error },
 });
+//user info
+export const fetchUserInfoBegin = () => ({
+  type: FETCH_USER_INFO_BEGIN,
+});
+
+export const fetchUserInfoSuccess = (userInfo) => ({
+  type: FETCH_USER_INFO_SUCCESS,
+  payload: userInfo,
+});
+
+export const fetchUserInfoFailure = (error) => ({
+  type: FETCH_USER_INFO_FAILURE,
+  payload: { error },
+});
 
 export const clearCourses = () => ({
   type: CLEAR_COURSES,
@@ -210,6 +227,14 @@ function fetchLinksAPI(courseId, courseContentId) {
     .get();
 
   return pdfsRef;
+}
+
+function fetchUserInfoAPI(user) {
+  const phoneNumber = user.phoneNumber.replace("+959", "09");
+  console.log("getting user info", phoneNumber);
+  let userRef = db.collection("students").doc(phoneNumber).get();
+
+  return userRef;
 }
 //course contents
 export function fetchCourseContents(courseId) {
@@ -322,6 +347,24 @@ export function fetchCatalogs() {
         dispatch(fetchCatalogsSuccess(catalogs));
       })
       .catch((error) => dispatch(fetchCatalogsFailure(error)));
+  };
+}
+
+export function fetchUserInfo() {
+  console.log("fetching user info");
+  return (dispatch, getState) => {
+    dispatch(fetchUserInfoBegin());
+    let user =
+      firebase.auth().currentUser ??
+      getState("app").user ??
+      JSON.parse(localStorage.getItem("user"));
+
+    return fetchUserInfoAPI(user)
+      .then((doc) => {
+        console.log("user data:", doc.data());
+        dispatch(fetchUserInfoSuccess(doc.data()));
+      })
+      .catch((error) => dispatch(fetchUserInfoFailure(error)));
   };
 }
 

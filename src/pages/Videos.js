@@ -1,5 +1,6 @@
 import "../styles/VideosStyle.css";
 import React from "react";
+import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { useEffect } from "react";
 import { fetchVideos, setSelectedVideo } from "../actions/courseActions";
@@ -8,6 +9,8 @@ import NoData from "../components/Reusables/NoData";
 
 function Videos(props) {
   useEffect(() => {
+    if (!props.selectedCourseContent || !props.selectedCourse) return;
+
     const payload = {
       courseId: props.selectedCourse.id,
       contentId: props.selectedCourseContent.id,
@@ -15,7 +18,11 @@ function Videos(props) {
     props.fetchVideos(payload);
   }, []);
 
+  if (!props.selectedCourse || !props.selectedCourseContent)
+    return <Redirect to="/" />;
+
   if (props.videos.length <= 0 && !props.isProgressShown) return <NoData />;
+
   return (
     <div>
       {props.videos ? (

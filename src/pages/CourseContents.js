@@ -1,5 +1,6 @@
 import { React } from "react";
 import { useLocation, useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { useEffect } from "react";
 import { connect } from "react-redux";
 import CourseContentItem from "../components/Courses/CourseContentItem";
@@ -10,11 +11,15 @@ function CourseContents(props) {
   const history = useHistory();
 
   useEffect(() => {
-    props.fetchCourseContents(props.selectedCourse.id);
+    if (props.selectedCourse)
+      props.fetchCourseContents(props.selectedCourse.id);
   }, []);
+
+  if (!props.selectedCourse) return <Redirect to="/" />;
 
   if (props.courseContents.length <= 0 && !props.isProgressShown)
     return <NoData />;
+
   return (
     <div>
       {props.selectedCourse ? (

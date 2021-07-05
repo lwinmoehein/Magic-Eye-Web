@@ -1,13 +1,17 @@
 import "../styles/VideoViewerStyle.css";
 import React, { useEffect } from "react";
+import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import ReactPlayer from "react-player";
 import Download from "../components/Reusables/Download";
 import { setDownloadUrl } from "../actions/index";
 function ViewVideo(props) {
   useEffect(() => {
+    if (!props.video) return;
     props.setDownloadUrl(props.video.url);
   }, []);
+
+  if (!props.video) return <Redirect to="/" />;
   return (
     <div className="viewVideoWrapper">
       <Download />

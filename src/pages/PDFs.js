@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import PDF from "../components/Courses/PDF";
 import { fetchPDFs } from "../actions/courseActions";
@@ -6,12 +7,16 @@ import NoData from "../components/Reusables/NoData";
 
 function PDFs(props) {
   useEffect(() => {
+    if (!props.selectedCourseContent || !props.selectedCourse) return;
     const payload = {
       courseId: props.selectedCourse.id,
       contentId: props.selectedCourseContent.id,
     };
     props.fetchPDFs(payload);
   }, []);
+
+  if (!props.selectedCourse || !props.selectedCourseContent)
+    return <Redirect to="/" />;
 
   if (props.pdfs.length <= 0 && !props.isProgressShown) return <NoData />;
 

@@ -8,7 +8,7 @@
   position: relative;
   height: 100%;
 }
-.courseContentWrapper > div {
+.courseContentWrapper > .contentType {
   display: flex;
   font-weight: bolder;
   color: black;
@@ -27,7 +27,7 @@
     display: flex;
     flex-flow: row;
   }
-  .courseContentWrapper > div {
+  .courseContentWrapper > .contentType {
     max-width: 200px;
     min-height: 150px;
     margin: 10px;

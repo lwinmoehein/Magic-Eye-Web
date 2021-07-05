@@ -1,4 +1,5 @@
 // Import FirebaseAuth and firebase.
+import "../styles/SiginStyle.css";
 import React, { useEffect } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { firebase } from "@firebase/app";
@@ -47,8 +48,7 @@ function SignInScreen(props) {
 
   if (!props.user) {
     return (
-      <div>
-        <h1> My App </h1> <p> Please sign - in: </p>{" "}
+      <div style={{ marginTop: "30px" }}>
         <StyledFirebaseAuth
           uiConfig={uiConfig}
           firebaseAuth={firebase.auth()}
@@ -60,7 +60,7 @@ function SignInScreen(props) {
 }
 
 const mapStateToProps = (state) => {
-  return { isProgressShown: state.app.isProgressShown,user:state.app.user };
+  return { isProgressShown: state.app.isProgressShown, user: state.app.user };
 };
 
 const mapDispatchToProps = (dispatch) => {
