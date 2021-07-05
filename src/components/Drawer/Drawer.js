@@ -74,15 +74,16 @@ class DrawerComponent extends React.Component {
               </ListItem>
             </Link>
           )}
-
-          <Link to="/about">
-            <ListItem button key={"About"}>
-              <ListItemIcon>
-                <InfoIcon />
-              </ListItemIcon>
-              <ListItemText primary="About" />
-            </ListItem>
-          </Link>
+          {this.props.user && (
+            <Link to="/about">
+              <ListItem button key={"About"}>
+                <ListItemIcon>
+                  <InfoIcon />
+                </ListItemIcon>
+                <ListItemText primary="About" />
+              </ListItem>
+            </Link>
+          )}
         </List>
         <Divider />
         <List>
