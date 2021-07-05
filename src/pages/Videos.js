@@ -1,3 +1,4 @@
+import "../styles/VideosStyle.css";
 import React from "react";
 import { connect } from "react-redux";
 import { useEffect } from "react";
@@ -16,8 +17,8 @@ function Videos(props) {
   return (
     <div>
       {props.selectedCourse ? (
-        <div className="courses">
-          <div className="coursesWrapper">
+        <div className="videos">
+          <div className="videosWrapper">
             {props.videos.map((video) => {
               return <Video video={video}></Video>;
             })}

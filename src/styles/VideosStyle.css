@@ -1,0 +1,28 @@
+.videosWrapper {
+  padding: 10px;
+  display: flex;
+  flex-flow: column;
+}
+
+.videosWrapper > div {
+  margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 1em 0.5em 1em 0.5em;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+@media screen and (min-width: 800px) {
+  .videosWrapper {
+    display: flex;
+    flex-flow: row;
+  }
+  .videosWrapper > div {
+    min-width: 150px;
+    min-height: 150px;
+    margin: 10px;
+  }
+}

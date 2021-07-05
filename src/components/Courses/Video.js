@@ -11,7 +11,11 @@ function Video(props) {
     history.push("/viewVideo");
     props.setSelectedVideo(props.video);
   }
-  return <div onClick={() => onVideoClicked()}>{props.video.name}</div>;
+  return (
+    <div onClick={() => onVideoClicked()}>
+      <div>{props.video.name}</div>
+    </div>
+  );
 }
 
 const mapStateToProps = (state) => {
