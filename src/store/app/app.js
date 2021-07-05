@@ -10,6 +10,9 @@ import {
   FETCH_COURSES_BEGIN,
   FETCH_COURSES_SUCCESS,
   FETCH_COURSES_FAILURE,
+  FETCH_CATALOGS_BEGIN,
+  FETCH_CATALOGS_SUCCESS,
+  FETCH_CATALOGS_FAILURE,
   CLEAR_COURSES,
   SET_SELECTED_COURSE,
   SET_SELECTED_COURSE_CONTENT,
@@ -37,6 +40,7 @@ const defaultAppState = {
   progressText: "Loading..",
   isDrawerOpen: false,
   courses: [],
+  catalogs: [],
   courseContents: [],
   selectedCourse: null,
   selectedCourseContent: null,
@@ -76,6 +80,24 @@ function app(state = defaultAppState, action) {
       return {
         ...state,
         user: action.payload,
+      };
+    case FETCH_CATALOGS_BEGIN:
+      return {
+        ...state,
+        isProgressShown: true,
+        progressText: "Fetching catalogs",
+      };
+    case FETCH_CATALOGS_SUCCESS:
+      return {
+        ...state,
+        isProgressShown: false,
+        catalogs: action.payload,
+      };
+    case FETCH_CATALOGS_FAILURE:
+      return {
+        ...state,
+        isProgressShown: false,
+        catalogs: [],
       };
     case FETCH_COURSES_BEGIN:
       return {

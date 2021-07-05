@@ -8,6 +8,7 @@ import ViewVideo from "./pages/ViewVideo";
 import ViewPDF from "./pages/ViewPDF";
 import ViewLink from "./pages/ViewLink";
 import Courses from "./pages/Courses";
+import Catalog from "./pages/Catalog";
 import CourseContents from "./pages/CourseContents";
 import CourseContentDetail from "./pages/CourseContentDetail";
 import SignInScreen from "./pages/SignInScreen";
@@ -26,6 +27,12 @@ function Routes(props) {
         path="/courses"
         user={props.user}
         component={Courses}
+      ></ProtectedRoute>
+      <ProtectedRoute
+        exact
+        path="/catalogs"
+        user={props.user}
+        component={Catalog}
       ></ProtectedRoute>
       <ProtectedRoute
         exact
@@ -80,7 +87,7 @@ function Routes(props) {
         <SignInScreen />
       </Route>
       <Route path="/">
-        <Home />
+        <Courses />
       </Route>
     </Switch>
   );

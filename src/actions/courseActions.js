@@ -20,6 +20,9 @@ import {
   SET_SELECTED_VIDEO,
   SET_SELECTED_PDF,
   SET_SELECTED_LINK,
+  FETCH_CATALOGS_BEGIN,
+  FETCH_CATALOGS_SUCCESS,
+  FETCH_CATALOGS_FAILURE,
 } from "../constants/action-types";
 import FirebaseConfig from "../config/FirebaseConfig";
 import { firebase } from "@firebase/app";
@@ -33,6 +36,20 @@ if (!firebase.apps.length) {
 
 let db = firebase.firestore();
 
+//catalogs
+export const fetchCatalogsBegin = () => ({
+  type: FETCH_CATALOGS_BEGIN,
+});
+
+export const fetchCatalogsSuccess = (catalogs) => ({
+  type: FETCH_CATALOGS_SUCCESS,
+  payload: catalogs,
+});
+
+export const fetchCatalogsFailure = (error) => ({
+  type: FETCH_CATALOGS_FAILURE,
+  payload: { error },
+});
 //COURSES
 export const fetchCoursesBegin = () => ({
   type: FETCH_COURSES_BEGIN,
@@ -137,6 +154,11 @@ export const setSelectedLink = (link) => ({
 });
 
 //apis
+function getCatalogsAPI() {
+  let catalogsRef = db.collection("courses");
+
+  return catalogsRef.get();
+}
 function getCoursesAPI(user) {
   console.log("fetching user data", user);
 
@@ -283,6 +305,23 @@ export function fetchCourses() {
         });
       })
       .catch((error) => dispatch(fetchCoursesFailure(error)));
+  };
+}
+
+export function fetchCatalogs() {
+  console.log("fetching catalogs");
+  return (dispatch, getState) => {
+    dispatch(fetchCatalogsBegin());
+
+    return getCatalogsAPI()
+      .then((querySnapshot) => {
+        let catalogs = querySnapshot.docs.map((doc) => {
+          return { ...doc.data(), id: doc.id };
+        });
+        console.log("catalogs:", catalogs);
+        dispatch(fetchCatalogsSuccess(catalogs));
+      })
+      .catch((error) => dispatch(fetchCatalogsFailure(error)));
   };
 }
 

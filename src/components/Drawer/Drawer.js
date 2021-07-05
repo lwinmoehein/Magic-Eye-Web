@@ -13,6 +13,8 @@ import HomeIcon from "@material-ui/icons/Home";
 import InfoIcon from "@material-ui/icons/Info";
 import MenuBookIcon from "@material-ui/icons/MenuBook";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import CategoryIcon from "@material-ui/icons/Category";
+import ViewListIcon from "@material-ui/icons/ViewList";
 import { firebase } from "@firebase/app";
 import { Link } from "react-router-dom";
 import { toggleProgress, toggleDrawer, storeUser, logOut } from "../../actions";
@@ -52,14 +54,27 @@ class DrawerComponent extends React.Component {
         onKeyDown={() => this.props.toggleDrawer()}
       >
         <List>
-          <Link to="/">
-            <ListItem button key={"Home"}>
-              <ListItemIcon>
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText primary="Home" />
-            </ListItem>
-          </Link>
+          {this.props.user && (
+            <Link to="/courses">
+              <ListItem button key={"Courses"}>
+                <ListItemIcon>
+                  <CategoryIcon />
+                </ListItemIcon>
+                <ListItemText primary="Courses" />
+              </ListItem>
+            </Link>
+          )}
+          {this.props.user && (
+            <Link to="/catalogs">
+              <ListItem button key={"Catalogs"}>
+                <ListItemIcon>
+                  <ViewListIcon />
+                </ListItemIcon>
+                <ListItemText primary="Catalogs" />
+              </ListItem>
+            </Link>
+          )}
+
           <Link to="/about">
             <ListItem button key={"About"}>
               <ListItemIcon>
@@ -68,16 +83,6 @@ class DrawerComponent extends React.Component {
               <ListItemText primary="About" />
             </ListItem>
           </Link>
-          {this.props.user && (
-            <Link to="/courses">
-              <ListItem button key={"Courses"}>
-                <ListItemIcon>
-                  <MenuBookIcon />
-                </ListItemIcon>
-                <ListItemText primary="Courses" />
-              </ListItem>
-            </Link>
-          )}
         </List>
         <Divider />
         <List>
