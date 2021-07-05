@@ -178,6 +178,17 @@ function fetchPDFsAPI(courseId, courseContentId) {
 
   return pdfsRef;
 }
+
+function fetchLinksAPI(courseId, courseContentId) {
+  console.log("content:", courseContentId, "course", courseId);
+  let pdfsRef = db
+    .collection("LinkByContent")
+    .doc(courseId)
+    .collection(courseContentId)
+    .get();
+
+  return pdfsRef;
+}
 //course contents
 export function fetchCourseContents(courseId) {
   console.log("fetching course contents:=>", courseId);
@@ -228,6 +239,23 @@ export function fetchPDFs(payload) {
         dispatch(fetchPDFsSuccess(payload));
       })
       .catch((error) => dispatch(fetchPDFsFailure()));
+  };
+}
+
+//links
+export function fetchLinks(payload) {
+  console.log("fetching links:=>", payload.courseId, ",", payload.contentId);
+  return (dispatch, getState) => {
+    dispatch(fetchLinksBegin());
+    return fetchLinksAPI(payload.courseId, payload.contentId)
+      .then((querySnapshot) => {
+        let payload = querySnapshot.docs.map((doc) => {
+          return { ...doc.data(), id: doc.id };
+        });
+        console.log("pdfs:", payload);
+        dispatch(fetchLinksSuccess(payload));
+      })
+      .catch((error) => dispatch(fetchLinksFailure()));
   };
 }
 

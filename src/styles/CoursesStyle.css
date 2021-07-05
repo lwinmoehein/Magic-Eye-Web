@@ -1,26 +1,29 @@
-.coursesWrapper{
-    padding: 10px;
+.coursesWrapper {
+  padding: 10px;
 
-    display: flex;
-    flex-flow: column;
+  display: flex;
+  flex-flow: column;
+  text-align: center;
 }
 .courses {
-    position:relative;
-    height: 100%;
+  position: relative;
+  height: 100%;
 }
 .coursesWrapper > div {
-    margin-bottom: 10px;
-    border-radius: 5px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 @media screen and (min-width: 800px) {
-    .coursesWrapper {
-        display: flex;
-        flex-flow: row;
-
-    }
-    .coursesWrapper >div{
-        min-width: 150px;
-        min-height: 150px;
-        margin: 10px;
-    }
+  .coursesWrapper {
+    display: flex;
+    flex-flow: row;
+  }
+  .coursesWrapper > div {
+    min-width: 150px;
+    min-height: 150px;
+    margin: 10px;
+  }
 }

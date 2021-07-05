@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { connect } from "react-redux";
 import CourseContentItem from "../components/Courses/CourseContentItem";
 import { fetchCourseContents } from "../actions/courseActions";
+import NoData from "../components/Reusables/NoData";
 
 function CourseContents(props) {
   const history = useHistory();
@@ -12,6 +13,8 @@ function CourseContents(props) {
     props.fetchCourseContents(props.selectedCourse.id);
   }, []);
 
+  if (props.courseContents.length <= 0 && !props.isProgressShown)
+    return <NoData />;
   return (
     <div>
       {props.selectedCourse ? (
@@ -38,6 +41,7 @@ const mapStateToProps = (state) => {
   return {
     selectedCourse: state.app.selectedCourse,
     courseContents: state.app.courseContents,
+    isProgressShown: state.app.isProgressShown,
   };
 };
 

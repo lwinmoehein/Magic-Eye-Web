@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { useEffect } from "react";
 import { fetchVideos, setSelectedVideo } from "../actions/courseActions";
 import Video from "../components/Courses/Video";
+import NoData from "../components/Reusables/NoData";
 
 function Videos(props) {
   useEffect(() => {
@@ -14,6 +15,7 @@ function Videos(props) {
     props.fetchVideos(payload);
   }, []);
 
+  if (props.videos.length <= 0 && !props.isProgressShown) return <NoData />;
   return (
     <div>
       {props.videos ? (
@@ -36,6 +38,7 @@ const mapStateToProps = (state) => {
     selectedCourseContent: state.app.selectedCourseContent,
     selectedCourse: state.app.selectedCourse,
     videos: state.app.videos,
+    isProgressShown: state.app.isProgressShown,
   };
 };
 

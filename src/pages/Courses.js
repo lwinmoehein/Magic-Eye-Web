@@ -1,52 +1,51 @@
-import React from 'react'
-import CourseItem from '../components/Courses/CourseItem'
-import '../styles/CoursesStyle.css'
-import FirebaseConfig from '../config/FirebaseConfig'
-import { firebase } from '@firebase/app'
-import  '@firebase/firestore'
-import {useEffect} from 'react'
+import React from "react";
+import CourseItem from "../components/Courses/CourseItem";
+import "../styles/CoursesStyle.css";
+import FirebaseConfig from "../config/FirebaseConfig";
+import { firebase } from "@firebase/app";
+import "@firebase/firestore";
+import { useEffect } from "react";
 import { connect } from "react-redux";
-import { toggleProgress } from '../actions'
-import {fetchCourses} from '../actions/courseActions'
+import { toggleProgress } from "../actions";
+import { fetchCourses } from "../actions/courseActions";
+import NoData from "../components/Reusables/NoData";
 
 if (!firebase.apps.length) {
-   firebase.initializeApp(FirebaseConfig);
-}else {
-   firebase.app(); // if already initialized, use that one
+  firebase.initializeApp(FirebaseConfig);
+} else {
+  firebase.app(); // if already initialized, use that one
 }
 
 let db = firebase.firestore();
 
 function Courses(props) {
-               
-    useEffect(() => {
-        props.fetchCourses();
-    }, [])
-
-
-    return (
-            <div className="courses">
-                <div className="coursesWrapper">
-                        {props.courses.map(course=>{return (<CourseItem key={course.id} item={course}/>)} )}
-                </div>
-            </div>
-    )
+  useEffect(() => {
+    props.fetchCourses();
+  }, []);
+  if (props.courses.length <= 0 && !props.isProgressShown) return <NoData />;
+  return (
+    <div className="courses">
+      <div className="coursesWrapper">
+        {props.courses.map((course) => {
+          return <CourseItem key={course.id} item={course} />;
+        })}
+      </div>
+    </div>
+  );
 }
 
-const mapStateToProps = state => {
-    return { 
-        isProgressShown:state.app.isProgressShown,
-        courses:state.app.courses
-    };
+const mapStateToProps = (state) => {
+  return {
+    isProgressShown: state.app.isProgressShown,
+    courses: state.app.courses,
+  };
 };
-  
-const mapDispatchToProps = (dispatch) => {
-    return {
-        toggleProgress: (payload) => dispatch(toggleProgress(payload)),
-        fetchCourses:()=>dispatch(fetchCourses())
-    }
-}
 
-export default connect(
-mapStateToProps,mapDispatchToProps)(Courses);
-  
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleProgress: (payload) => dispatch(toggleProgress(payload)),
+    fetchCourses: () => dispatch(fetchCourses()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Courses);
