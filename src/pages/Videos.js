@@ -16,7 +16,7 @@ function Videos(props) {
 
   return (
     <div>
-      {props.selectedCourse ? (
+      {props.videos ? (
         <div className="videos">
           <div className="videosWrapper">
             {props.videos.map((video) => {

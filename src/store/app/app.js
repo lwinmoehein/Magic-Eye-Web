@@ -19,6 +19,12 @@ import {
   FETCH_VIDEOS_BEGIN,
   FETCH_VIDEOS_SUCCESS,
   FETCH_VIDEOS_FAILURE,
+  FETCH_PDFS_BEGIN,
+  FETCH_PDFS_SUCCESS,
+  FETCH_PDFS_FAILURE,
+  FETCH_LINKS_BEGIN,
+  FETCH_LINKS_SUCCESS,
+  FETCH_LINKS_FAILURE,
   SET_SELECTED_VIDEO,
   SET_SELECTED_PDF,
   SET_SELECTED_LINK,
@@ -37,6 +43,8 @@ const defaultAppState = {
   selectedPDF: null,
   selectedLink: null,
   videos: [],
+  pdfs: [],
+  links: [],
 };
 
 function app(state = defaultAppState, action) {
@@ -121,6 +129,44 @@ function app(state = defaultAppState, action) {
         ...state,
         isProgressShown: false,
         videos: [],
+      };
+    case FETCH_PDFS_BEGIN:
+      return {
+        ...state,
+        isProgressShown: true,
+        progressText: "Fetching PDFs",
+        pdfs: [],
+      };
+    case FETCH_PDFS_SUCCESS:
+      return {
+        ...state,
+        isProgressShown: false,
+        pdfs: action.payload,
+      };
+    case FETCH_PDFS_FAILURE:
+      return {
+        ...state,
+        isProgressShown: false,
+        pdfs: [],
+      };
+    case FETCH_LINKS_BEGIN:
+      return {
+        ...state,
+        isProgressShown: true,
+        progressText: "Fetching Links",
+        links: [],
+      };
+    case FETCH_LINKS_SUCCESS:
+      return {
+        ...state,
+        isProgressShown: false,
+        links: action.payload,
+      };
+    case FETCH_LINKS_FAILURE:
+      return {
+        ...state,
+        isProgressShown: false,
+        links: [],
       };
     case CLEAR_COURSES:
       return {

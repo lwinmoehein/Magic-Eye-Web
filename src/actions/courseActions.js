@@ -8,6 +8,12 @@ import {
   FETCH_VIDEOS_BEGIN,
   FETCH_VIDEOS_SUCCESS,
   FETCH_VIDEOS_FAILURE,
+  FETCH_PDFS_BEGIN,
+  FETCH_PDFS_SUCCESS,
+  FETCH_PDFS_FAILURE,
+  FETCH_LINKS_BEGIN,
+  FETCH_LINKS_SUCCESS,
+  FETCH_LINKS_FAILURE,
   CLEAR_COURSES,
   SET_SELECTED_COURSE,
   SET_SELECTED_COURSE_CONTENT,
@@ -73,6 +79,34 @@ export const fetchVideosFailure = (error) => ({
   type: FETCH_VIDEOS_FAILURE,
   payload: { error },
 });
+//pdfs
+export const fetchPDFsBegin = () => ({
+  type: FETCH_PDFS_BEGIN,
+});
+
+export const fetchPDFsSuccess = (pdfs) => ({
+  type: FETCH_PDFS_SUCCESS,
+  payload: pdfs,
+});
+
+export const fetchPDFsFailure = (error) => ({
+  type: FETCH_PDFS_FAILURE,
+  payload: { error },
+});
+
+export const fetchLinksBegin = () => ({
+  type: FETCH_LINKS_BEGIN,
+});
+
+export const fetchLinksSuccess = (links) => ({
+  type: FETCH_LINKS_SUCCESS,
+  payload: links,
+});
+
+export const fetchLinksFailure = (error) => ({
+  type: FETCH_LINKS_FAILURE,
+  payload: { error },
+});
 
 export const clearCourses = () => ({
   type: CLEAR_COURSES,
@@ -134,6 +168,16 @@ function fetchVideosAPI(courseId, courseContentId) {
 
   return videosRef;
 }
+function fetchPDFsAPI(courseId, courseContentId) {
+  console.log("content:", courseContentId, "course", courseId);
+  let pdfsRef = db
+    .collection("PdfByContent")
+    .doc(courseId)
+    .collection(courseContentId)
+    .get();
+
+  return pdfsRef;
+}
 //course contents
 export function fetchCourseContents(courseId) {
   console.log("fetching course contents:=>", courseId);
@@ -166,7 +210,24 @@ export function fetchVideos(payload) {
         console.log("video:", payload);
         dispatch(fetchVideosSuccess(payload));
       })
-      .catch((error) => dispatch(fetchCourseContentsFailure()));
+      .catch((error) => dispatch(fetchVideosFailure()));
+  };
+}
+
+//videos
+export function fetchPDFs(payload) {
+  console.log("fetching pdfs:=>", payload.courseId, ",", payload.contentId);
+  return (dispatch, getState) => {
+    dispatch(fetchPDFsBegin());
+    return fetchPDFsAPI(payload.courseId, payload.contentId)
+      .then((querySnapshot) => {
+        let payload = querySnapshot.docs.map((doc) => {
+          return { ...doc.data(), id: doc.id };
+        });
+        console.log("pdfs:", payload);
+        dispatch(fetchPDFsSuccess(payload));
+      })
+      .catch((error) => dispatch(fetchPDFsFailure()));
   };
 }
 
