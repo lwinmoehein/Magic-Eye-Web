@@ -1,0 +1,10 @@
+.pdfWrapper {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: center;
+}
+.react-pdf__Page__canvas {
+  width: 100% !important;
+  height: fit-content !important;
+}

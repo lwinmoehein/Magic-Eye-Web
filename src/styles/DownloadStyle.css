@@ -1,0 +1,19 @@
+.downloadWrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 1em;
+  padding: 1em;
+}
+.downloadButton {
+  display: flex;
+  background-color: blue;
+  color: white;
+  font-weight: bolder;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2em 0.5em 0.2em 0.5em;
+}
+.downloadLink {
+  color: white;
+}

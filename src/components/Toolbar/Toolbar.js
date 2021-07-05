@@ -14,37 +14,37 @@ import SearchIcon from "@material-ui/icons/Search";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import {TOGGLE_DRAWER} from '../../constants/action-types';
-import firebase from '@firebase/app'
-const styles = theme => ({
+import { TOGGLE_DRAWER } from "../../constants/action-types";
+import firebase from "@firebase/app";
+const styles = (theme) => ({
   grow: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   menuButton: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
   },
   title: {
     display: "none",
     [theme.breakpoints.up("sm")]: {
-      display: "block"
-    }
+      display: "block",
+    },
   },
   search: {
     position: "relative",
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
     "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25)
+      backgroundColor: fade(theme.palette.common.white, 0.25),
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
     width: "100%",
     [theme.breakpoints.up("sm")]: {
       marginLeft: theme.spacing(3),
-      width: "auto"
-    }
+      width: "auto",
+    },
   },
   searchIcon: {
     width: theme.spacing(7),
@@ -53,124 +53,66 @@ const styles = theme => ({
     pointerEvents: "none",
     display: "flex",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   inputRoot: {
-    color: "inherit"
+    color: "inherit",
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 7),
     transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("md")]: {
-      width: 200
-    }
+      width: 200,
+    },
   },
   sectionDesktop: {
     display: "none",
     [theme.breakpoints.up("md")]: {
-      display: "flex"
-    }
+      display: "flex",
+    },
   },
   sectionMobile: {
     display: "flex",
     [theme.breakpoints.up("md")]: {
-      display: "none"
-    }
-  }
+      display: "none",
+    },
+  },
 });
 
 class ToolbarComponent extends React.Component {
   state = {
     achorEl: false,
-    MobileMoreAnchorEl: false
+    MobileMoreAnchorEl: false,
   };
 
-  handleProfileMenuOpen = event => {
+  handleProfileMenuOpen = (event) => {
     this.setState({
-      achorEl: event.currentTarget
+      achorEl: event.currentTarget,
     });
   };
 
   handleMobileMenuClose = () => {
     this.setState({
-      mobileMoreAnchorEl: null
+      mobileMoreAnchorEl: null,
     });
   };
 
   handleMenuClose = () => {
     this.setState({
       achorEl: null,
-      mobileMoreAnchorEl: null
+      mobileMoreAnchorEl: null,
     });
   };
 
-  handleMobileMenuOpen = event => {
+  handleMobileMenuOpen = (event) => {
     this.setState({
-      mobileMoreAnchorEl: event.currentTarget
+      mobileMoreAnchorEl: event.currentTarget,
     });
   };
 
   render() {
     const { classes } = this.props;
-    const isMenuOpen = Boolean(this.state.anchorEl);
-    const isMobileMenuOpen = Boolean(this.state.mobileMoreAnchorEl);
-
-    const menuId = "primary-search-account-menu";
-    const renderMenu = (
-      <Menu
-        anchorEl={this.state.anchorEl}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        id={menuId}
-        keepMounted
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
-        open={isMenuOpen}
-        onClose={this.handleMenuClose}
-      >
-        <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
-        <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
-      </Menu>
-    );
-
-    const mobileMenuId = "primary-search-account-menu-mobile";
-    const renderMobileMenu = (
-      <Menu
-        anchorEl={this.state.mobileMoreAnchorEl}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        id={mobileMenuId}
-        keepMounted
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
-        open={isMobileMenuOpen}
-        onClose={this.handleMobileMenuClose}
-      >
-        <MenuItem>
-          <IconButton aria-label="show 4 new mails" color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <MailIcon />
-            </Badge>
-          </IconButton>
-          <p><Link to="/">Home</Link></p>
-        </MenuItem>
-        <MenuItem>
-          <IconButton aria-label="show 11 new notifications" color="inherit">
-            <Badge badgeContent={11} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <p><Link to="/about">About</Link></p>
-        </MenuItem>
-        <MenuItem onClick={this.handleProfileMenuOpen}>
-          <IconButton
-            aria-label="account of current user"
-            aria-controls="primary-search-account-menu"
-            aria-haspopup="true"
-            color="inherit"
-          >
-          </IconButton>
-          <p>Profile</p>
-        </MenuItem>
-      </Menu>
-    );
 
     return (
       <div className={classes.grow}>
@@ -181,40 +123,46 @@ class ToolbarComponent extends React.Component {
               className={classes.menuButton}
               color="inherit"
               aria-label="open drawer"
-              onClick={()=>this.props.toggleDrawer()}
+              onClick={() => this.props.toggleDrawer()}
             >
               <MenuIcon />
             </IconButton>
             <Typography className={classes.title} variant="h6" noWrap>
               Magic Eye Computer (Pakokku)
             </Typography>
-         
+
             <div className={classes.grow} />
-            <div className={classes.sectionDesktop}>
-              <Typography variant="h6" className={classes.title}>
-                 {this.props.user?this.props.user.phoneNumber:'Not Logged In'}
+            <div>
+              <Typography variant="h6">
+                {this.props.user
+                  ? this.props.user.phoneNumber
+                  : "Not Logged In"}
               </Typography>
             </div>
-          
+            {/* <div className={classes.sectionMobile}>
+              <Typography variant="h6" className={classes.title}>
+                {this.props.user
+                  ? this.props.user.phoneNumber
+                  : "Not Logged In"}
+              </Typography>
+            </div> */}
           </Toolbar>
         </AppBar>
-        {renderMobileMenu}
-        {renderMenu}
       </div>
     );
   }
 }
 
-const mapStateToProps = state => {
-  return { isDrawerOpen:state.app.isDrawerOpen,user:state.app.user };
+const mapStateToProps = (state) => {
+  return { isDrawerOpen: state.app.isDrawerOpen, user: state.app.user };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    toggleDrawer: () => dispatch({type:TOGGLE_DRAWER}),
-  }
-}
+    toggleDrawer: () => dispatch({ type: TOGGLE_DRAWER }),
+  };
+};
 
-export default withStyles(styles)(connect(
-  mapStateToProps,mapDispatchToProps)(ToolbarComponent));
-
+export default withStyles(styles)(
+  connect(mapStateToProps, mapDispatchToProps)(ToolbarComponent)
+);

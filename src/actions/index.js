@@ -4,16 +4,16 @@ import {
   LOG_OUT,
   STORE_USER,
 } from "../constants/action-types";
-import { firebase } from '@firebase/app'
-import '@firebase/auth'
-import FirebaseConfig from '../config/FirebaseConfig'
+import { firebase } from "@firebase/app";
+import "@firebase/auth";
+import FirebaseConfig from "../config/FirebaseConfig";
+import { SET_DOWNLOAD_URL } from "../constants/action-types";
 
 if (!firebase.apps.length) {
-    firebase.initializeApp(FirebaseConfig);
+  firebase.initializeApp(FirebaseConfig);
 } else {
-    firebase.app(); // if already initialized, use that one
+  firebase.app(); // if already initialized, use that one
 }
-
 
 export function toggleProgress(payload) {
   return { type: TOGGLE_PROGRESS, payload: payload };
@@ -32,4 +32,8 @@ export function storeUser(payload) {
   localStorage.setItem("user", JSON.stringify(payload));
   console.log("user stored on local storage", payload);
   return { type: STORE_USER, payload };
+}
+
+export function setDownloadUrl(payload) {
+  return { type: SET_DOWNLOAD_URL, payload };
 }

@@ -28,6 +28,7 @@ import {
   SET_SELECTED_VIDEO,
   SET_SELECTED_PDF,
   SET_SELECTED_LINK,
+  SET_DOWNLOAD_URL,
 } from "../../constants/action-types";
 
 const defaultAppState = {
@@ -45,6 +46,7 @@ const defaultAppState = {
   videos: [],
   pdfs: [],
   links: [],
+  downloadUrl: "",
 };
 
 function app(state = defaultAppState, action) {
@@ -199,6 +201,11 @@ function app(state = defaultAppState, action) {
       return {
         ...state,
         selectedLink: action.payload.selectedLink,
+      };
+    case SET_DOWNLOAD_URL:
+      return {
+        ...state,
+        downloadUrl: action.payload,
       };
 
     default:
