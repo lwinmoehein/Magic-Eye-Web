@@ -20,6 +20,7 @@ function ViewPDF(props) {
         file={{
           url: props.pdf.url,
         }}
+        width="100"
         onLoadSuccess={onDocumentLoadSuccess}
       >
         <Page pageNumber={pageNumber} />
