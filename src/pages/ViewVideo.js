@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 import ReactPlayer from "react-player";
 import Download from "../components/Reusables/Download";
 import { setDownloadUrl } from "../actions/index";
+import VideoPlayer from "../components/Reusables/VideoPlayer";
+
 function ViewVideo(props) {
   useEffect(() => {
     if (!props.video) return;
@@ -12,18 +14,23 @@ function ViewVideo(props) {
   }, []);
 
   if (!props.video) return <Redirect to="/" />;
+
+  const videoJsOptions = {
+    autoplay: false,
+    controls: true,
+    fluid: true,
+    aspectRatio: "16:7",
+    sources: [
+      {
+        src: props.video.url,
+        type: "video/mp4",
+      },
+    ],
+  };
+
   return (
-    <div className="viewVideoWrapper">
-      <Download />
-      <div className="player-wrapper">
-        <ReactPlayer
-          url={props.video.url}
-          className="react-player"
-          playing
-          width="100%"
-          height="100%"
-        />
-      </div>
+    <div className="videoViewerWrapper">
+      <VideoPlayer className="player" {...videoJsOptions} />
     </div>
   );
 }

@@ -7,8 +7,7 @@ import { Document, Page } from "react-pdf";
 import { pdfjs } from "react-pdf";
 import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
 import Download from "../components/Reusables/Download";
-import { setDownloadUrl } from "../actions/index";
-
+import { setDownloadUrl, toggleProgress } from "../actions/index";
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 function ViewPDF(props) {
@@ -17,11 +16,16 @@ function ViewPDF(props) {
 
   useEffect(() => {
     if (!props.pdf) return;
+    props.toggleProgress(true);
     props.setDownloadUrl(props.pdf.url);
   }, []);
 
   function onDocumentLoadSuccess({ numPages }) {
+    props.toggleProgress(false);
     setNumPages(numPages);
+  }
+  function onLoadError() {
+    props.toggleProgress(false);
   }
 
   if (!props.pdf) return <Redirect to="/" />;
@@ -35,13 +39,14 @@ function ViewPDF(props) {
 
   return (
     <div>
-      <Download />
       <PDFDocumentWrapper>
         <Document
           file={{
             url: props.pdf.url,
           }}
+          loading=""
           onLoadSuccess={onDocumentLoadSuccess}
+          onLoadError={onLoadError}
         >
           <Page pageNumber={pageNumber} />
         </Document>
@@ -58,6 +63,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    toggleProgress: (payload) => dispatch(toggleProgress(payload)),
     setDownloadUrl: (payload) => dispatch(setDownloadUrl(payload)),
   };
 };

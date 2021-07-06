@@ -1,20 +1,3 @@
-.player-wrapper {
-  position: relative;
-  width: 100% !important;
-  height: 100% !important;
-  /* Player ratio: 100 / (1280 / 720) */
-}
-
-.react-player {
-  width: 100% !important;
-  height: 100% !important;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-.viewVideoWrapper {
-  display: flex;
-  flex-flow: column;
-  width: 100%;
-  height: 100%;
+video {
+  /* height: 90vh !important; */
 }
