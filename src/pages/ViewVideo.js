@@ -8,13 +8,12 @@ import { setDownloadUrl } from "../actions/index";
 import VideoPlayer from "../components/Reusables/VideoPlayer";
 
 function ViewVideo(props) {
-  useEffect(() => {
-    if (!props.video) return;
-    props.setDownloadUrl(props.video.url);
-  }, []);
-
   if (!props.video) return <Redirect to="/" />;
-
+  let videoId = props.video.url.substring(
+    props.video.url.lastIndexOf("d/") + 2,
+    props.video.url.lastIndexOf("/view")
+  );
+  const downloadableVideoUrl = `https://drive.google.com/u/0/uc?id=${videoId}&export=download&confirm=dGGp`;
   const videoJsOptions = {
     autoplay: false,
     controls: true,
@@ -22,7 +21,7 @@ function ViewVideo(props) {
     aspectRatio: "16:7",
     sources: [
       {
-        src: props.video.url,
+        src: downloadableVideoUrl,
         type: "video/mp4",
       },
     ],
@@ -42,9 +41,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    setDownloadUrl: (payload) => dispatch(setDownloadUrl(payload)),
-  };
+  return {};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewVideo);
