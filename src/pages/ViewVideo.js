@@ -8,6 +8,7 @@ import { setDownloadUrl } from "../actions/index";
 import VideoPlayer from "../components/Reusables/VideoPlayer";
 
 function ViewVideo(props) {
+  useEffect(() => {});
   if (!props.video) return <Redirect to="/" />;
   let videoId = props.video.url.substring(
     props.video.url.lastIndexOf("d/") + 2,
