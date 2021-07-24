@@ -6,15 +6,31 @@ import ReactPlayer from "react-player";
 import Download from "../components/Reusables/Download";
 import { setDownloadUrl } from "../actions/index";
 import VideoPlayer from "../components/Reusables/VideoPlayer";
+import axios from "axios";
 
 function ViewVideo(props) {
-  useEffect(() => {});
+  let downloadableVideoUrl = "";
+  useEffect(() => {
+    //extract absolute links
+    const extractorUrl = "http://www.oursecretworld.site/linkextractor.php";
+    fetch(extractorUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: { media_link: props.video.url },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        throw err;
+      });
+  });
+
   if (!props.video) return <Redirect to="/" />;
-  let videoId = props.video.url.substring(
-    props.video.url.lastIndexOf("d/") + 2,
-    props.video.url.lastIndexOf("/view")
-  );
-  const downloadableVideoUrl = `https://drive.google.com/u/0/uc?id=${videoId}&export=download&confirm=dGGp`;
+
   const videoJsOptions = {
     autoplay: false,
     controls: true,
