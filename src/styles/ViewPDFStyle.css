@@ -8,3 +8,20 @@
   width: 100% !important;
   height: fit-content !important;
 }
+
+.pdfActionsWrapper {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+}
+.pdfActionsWrapper > a {
+  margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 1em 0.5em 1em 0.5em;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  max-width: 300px;
+  display: flex;
+}
