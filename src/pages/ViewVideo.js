@@ -1,33 +1,40 @@
 import "../styles/VideoViewerStyle.css";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import ReactPlayer from "react-player";
 import Download from "../components/Reusables/Download";
-import { setDownloadUrl } from "../actions/index";
+import { setDownloadUrl, toggleProgress } from "../actions/index";
 import VideoPlayer from "../components/Reusables/VideoPlayer";
 import axios from "axios";
+import ProgressBar from "../components/Reusables/ProgressBar";
 
 function ViewVideo(props) {
-  let downloadableVideoUrl = "";
+  let [downloadableVideoUrl, setDownloadableUrl] = useState("");
   useEffect(() => {
+    props.toggleProgress(true);
     //extract absolute links
-    const extractorUrl = "http://www.oursecretworld.site/linkextractor.php";
-    fetch(extractorUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: { media_link: props.video.url },
+    const extractorUrl = "https://www.oursecretworld.site/linkextractor.php";
+    let formData = new FormData();
+    formData.append("media_link", props.video.url);
+    axios({
+      method: "post",
+      url: extractorUrl,
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" },
     })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
+      .then(function (response) {
+        //handle success
+        console.log("url:", response.data.absoluteLink);
+        setDownloadableUrl(response.data.absoluteLink);
+        props.toggleProgress(false);
       })
-      .catch((err) => {
-        throw err;
+      .catch(function (response) {
+        //handle error
+        console.log(response);
+        props.toggleProgress(false);
       });
-  });
+  }, []);
 
   if (!props.video) return <Redirect to="/" />;
 
@@ -43,12 +50,11 @@ function ViewVideo(props) {
       },
     ],
   };
+  let videoView = <div></div>;
+  if (downloadableVideoUrl)
+    videoView = <VideoPlayer className="player" {...videoJsOptions} />;
 
-  return (
-    <div className="videoViewerWrapper">
-      <VideoPlayer className="player" {...videoJsOptions} />
-    </div>
-  );
+  return <div className="videoViewerWrapper">{videoView}</div>;
 }
 
 const mapStateToProps = (state) => {
@@ -58,7 +64,9 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    toggleProgress: (payload) => dispatch(toggleProgress(payload)),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewVideo);

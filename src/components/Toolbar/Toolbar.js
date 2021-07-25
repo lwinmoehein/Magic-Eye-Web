@@ -130,7 +130,7 @@ class ToolbarComponent extends React.Component {
               <MenuIcon />
             </IconButton>
             <Typography className={classes.title} variant="h6" noWrap>
-              <span className="whiteText">Magic Eye Computer (Pakokku)</span>
+              <span className="whiteText">Magic Eye Learning Center</span>
             </Typography>
 
             <div className={classes.grow} />
