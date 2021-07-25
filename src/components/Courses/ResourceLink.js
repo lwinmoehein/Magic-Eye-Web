@@ -10,7 +10,7 @@ function ResourceLink(props) {
         }}
         target="_blank"
       >
-        {props.link.link}
+        {props.link.name}
       </Link>
     </div>
   );
