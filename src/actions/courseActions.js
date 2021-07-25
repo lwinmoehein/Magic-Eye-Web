@@ -203,6 +203,7 @@ function fetchVideosAPI(courseId, courseContentId) {
     .collection("VideoByContent")
     .doc(courseId)
     .collection(courseContentId)
+    .where("visible", "==", true)
     .get();
 
   return videosRef;
@@ -213,6 +214,7 @@ function fetchPDFsAPI(courseId, courseContentId) {
     .collection("PdfByContent")
     .doc(courseId)
     .collection(courseContentId)
+    .where("visible", "==", true)
     .get();
 
   return pdfsRef;
@@ -224,6 +226,7 @@ function fetchLinksAPI(courseId, courseContentId) {
     .collection("LinkByContent")
     .doc(courseId)
     .collection(courseContentId)
+    .where("visible", "==", true)
     .get();
 
   return pdfsRef;
