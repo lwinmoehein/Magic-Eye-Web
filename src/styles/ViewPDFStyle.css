@@ -13,8 +13,18 @@
   display: flex;
   flex-flow: column;
   justify-content: center;
+  align-items: center;
+}
+@media screen and (min-width: 800px) {
+  .pdfActionsWrapper {
+    flex-flow: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
 }
 .pdfActionsWrapper > a {
+  min-width: 300px;
+  margin: 10px;
   margin-bottom: 10px;
   border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
