@@ -2,15 +2,13 @@ import "../styles/VideoViewerStyle.css";
 import React, { useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import ReactPlayer from "react-player";
-import Download from "../components/Reusables/Download";
-import { setDownloadUrl, toggleProgress } from "../actions/index";
+import { toggleProgress } from "../actions/index";
 import VideoPlayer from "../components/Reusables/VideoPlayer";
 import axios from "axios";
-import ProgressBar from "../components/Reusables/ProgressBar";
+import NoData from "../components/Reusables/NoData";
 
 function ViewVideo(props) {
-  let [downloadableVideoUrl, setDownloadableUrl] = useState("");
+  let [downloadableVideoUrl, setDownloadableVideoUrl] = useState("");
   useEffect(() => {
     props.toggleProgress(true);
     //extract absolute links
@@ -26,7 +24,7 @@ function ViewVideo(props) {
       .then(function (response) {
         //handle success
         console.log("url:", response.data.absoluteLink);
-        setDownloadableUrl(response.data.absoluteLink);
+        setDownloadableVideoUrl(response.data.absoluteLink);
         props.toggleProgress(false);
       })
       .catch(function (response) {
@@ -50,7 +48,18 @@ function ViewVideo(props) {
       },
     ],
   };
-  let videoView = <div></div>;
+  let videoView = (
+    <div
+      style={{
+        display: !props.isProgressShown ? "block" : "none",
+        marginTop: "150px",
+        textAlign: "center",
+        fontWeight: "bolder",
+      }}
+    >
+      Sorry,something wrong while extracting Video links !!!
+    </div>
+  );
   if (downloadableVideoUrl)
     videoView = <VideoPlayer className="player" {...videoJsOptions} />;
 
@@ -60,6 +69,7 @@ function ViewVideo(props) {
 const mapStateToProps = (state) => {
   return {
     video: state.app.selectedVideo,
+    isProgressShown: state.app.isProgressShown,
   };
 };
 

@@ -1,21 +1,13 @@
 import "../styles/ViewPDFStyle.css";
-import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import { Document, Page } from "react-pdf";
-import { pdfjs } from "react-pdf";
-import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
-import Download from "../components/Reusables/Download";
 import { setDownloadUrl, toggleProgress } from "../actions/index";
 import axios from "axios";
-pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+import NoData from "../components/Reusables/NoData";
 
 function ViewPDF(props) {
-  const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
-
-  let [downloadableVideoUrl, setDownloadableUrl] = useState("");
+  let [downloadablePdfUrl, setDownloadablePdfUrl] = useState("");
   useEffect(() => {
     if (!props.pdf) return;
 
@@ -32,55 +24,43 @@ function ViewPDF(props) {
     })
       .then(function (response) {
         //handle success
-        console.log("url:", response.data.absoluteLink);
-        setDownloadableUrl(response.data.absoluteLink);
+        setDownloadablePdfUrl(response.data.absoluteLink);
         props.toggleProgress(false);
       })
       .catch(function (response) {
         //handle error
-        console.log(response);
         props.toggleProgress(false);
       });
   }, []);
 
-  function onDocumentLoadSuccess({ numPages }) {
-    props.toggleProgress(false);
-    setNumPages(numPages);
-  }
-  function onLoadError() {
-    props.toggleProgress(false);
-  }
-
-  function openPDF() {
-    window.open(downloadableVideoUrl);
-    return false;
-  }
-
   if (!props.pdf) return <Redirect to="/" />;
 
-  let pdfView = <div></div>;
-  if (downloadableVideoUrl)
+  let pdfView = (
+    <div
+      style={{
+        display: !props.isProgressShown ? "block" : "none",
+        marginTop: "150px",
+        textAlign: "center",
+        fontWeight: "bolder",
+      }}
+    >
+      Sorry,something wrong while extracting pdf links !!!
+    </div>
+  );
+  if (downloadablePdfUrl)
     pdfView = (
       <div className="pdfActionsWrapper">
         <a
           href={
-            "https://drive.google.com/viewerng/viewer?url=" +
-            downloadableVideoUrl
+            "https://drive.google.com/viewerng/viewer?url=" + downloadablePdfUrl
           }
           target="_blank"
         >
           View PDF
         </a>
-        <a href={downloadableVideoUrl}>Download PDF</a>
+        <a href={downloadablePdfUrl}>Download PDF</a>
       </div>
     );
-
-  const PDFDocumentWrapper = styled.div`
-    canvas {
-      width: 100% !important;
-      height: auto !important;
-    }
-  `;
 
   return <div>{pdfView}</div>;
 }
@@ -88,6 +68,7 @@ function ViewPDF(props) {
 const mapStateToProps = (state) => {
   return {
     pdf: state.app.selectedPDF,
+    isProgressShown: state.app.isProgressShown,
   };
 };
 
