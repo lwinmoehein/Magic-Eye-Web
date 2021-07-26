@@ -23,7 +23,11 @@ export default class VideoPlayer extends React.Component {
   render() {
     return (
       <div>
-        <div data-vjs-player>
+        <div
+          data-vjs-player
+          onContextMenu={(e) => e.preventDefault()}
+          style={{ width: "100%" }}
+        >
           <video
             ref={(node) => (this.videoNode = node)}
             className="video-js vjs-big-play-centered"
