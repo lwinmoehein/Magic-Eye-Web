@@ -50,9 +50,6 @@ function ViewVideo(props) {
   if ((playableUrl.type = "YOUTUBE") && playableUrl.embedId)
     videoView = <YouTubePlayer playableUrl={playableUrl} />;
 
-  if ((playableUrl.type = "MEDIA_FIRE") && playableUrl.downloadableUrl)
-    videoView = <VideoPlayer className="player" {...mediaFirePlayerOptions} />;
-
   return <div className="videoViewerWrapper">{videoView}</div>;
 }
 
