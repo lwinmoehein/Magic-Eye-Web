@@ -26,45 +26,10 @@ function ViewVideo(props) {
 
   useEffect(() => {
     //youtube
-    if (!props.video.url.includes("mediafire.com")) {
-      setPlayableUrl({
-        type: "YOUTUBE",
-        embedId: props.video.url.split(".be/")[1],
-      });
-    } else {
-      const mediaFireUrl = getMedialUrl(
-        "https://www.mediafire.com/file/0xh3v78yzgbgtb0/The_Wanted_-_We_Own_The_Night_%2528Official_Video%2529.mp4/file"
-      )
-        .then(function (response) {
-          //handle success
-          const mediaFireUrl = response.data.absoluteLink;
-          if (mediaFireUrl) {
-            setPlayableUrl({
-              type: "MEDIA_FIRE",
-              downloadableUrl: mediaFireUrl,
-            });
-            console.log("playable", playableUrl);
-
-            const videoJsOptions = {
-              autoplay: true,
-              controls: true,
-              fluid: true,
-              aspectRatio: "16:7",
-              sources: [
-                {
-                  src: playableUrl.downloadableUrl,
-                  type: "video/mp4",
-                },
-              ],
-            };
-            setMediaFirePlayerOptions(videoJsOptions);
-            console.log("md options", mediaFirePlayerOptions);
-          }
-        })
-        .catch(function (response) {
-          return false;
-        });
-    }
+    setPlayableUrl({
+      type: "YOUTUBE",
+      embedId: props.video.url.split(".be/")[1],
+    });
   }, []);
 
   if (!props.video) return <Redirect to="/" />;
