@@ -203,7 +203,7 @@ function fetchVideosAPI(courseId, courseContentId) {
     .collection("VideoByContent")
     .doc(courseId)
     .collection(courseContentId)
-    .orderBy("createdDate","desc")
+    .orderBy("createdDate","asc")
     .get();
 
   return videosRef;
@@ -215,7 +215,7 @@ function fetchPDFsAPI(courseId, courseContentId) {
     .doc(courseId)
     .collection(courseContentId)
     //.where("visible", "==", true)
-    .orderBy("createdDate","desc")
+    .orderBy("createdDate","asc")
     .get();
 
   return pdfsRef;
@@ -228,7 +228,7 @@ function fetchLinksAPI(courseId, courseContentId) {
     .doc(courseId)
     .collection(courseContentId)
    // .where("visible", "==", true)
-   .orderBy("createdDate","desc")
+   .orderBy("createdDate","asc")
     .get();
 
   return pdfsRef;
