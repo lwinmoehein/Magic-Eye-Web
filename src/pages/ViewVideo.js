@@ -28,7 +28,7 @@ function ViewVideo(props) {
     //youtube
     setPlayableUrl({
       type: "YOUTUBE",
-      embedId: props.video.url.split(".be/")[1],
+      embedId: props.video.url,
     });
   }, []);
 
