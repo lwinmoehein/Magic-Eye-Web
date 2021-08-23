@@ -290,6 +290,8 @@ export function fetchPDFs(payload) {
         let payload = querySnapshot.docs.map((doc) => {
           return { ...doc.data(), id: doc.id };
         });
+        payload=payload.filter(pdf=>pdf.visible);
+
         console.log("pdfs:", payload);
         dispatch(fetchPDFsSuccess(payload));
       })
@@ -307,6 +309,9 @@ export function fetchLinks(payload) {
         let payload = querySnapshot.docs.map((doc) => {
           return { ...doc.data(), id: doc.id };
         });
+        
+        payload=payload.filter(link=>link.visible);
+
         console.log("pdfs:", payload);
         dispatch(fetchLinksSuccess(payload));
       })
