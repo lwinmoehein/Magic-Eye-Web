@@ -203,7 +203,7 @@ function fetchVideosAPI(courseId, courseContentId) {
     .collection("VideoByContent")
     .doc(courseId)
     .collection(courseContentId)
-    .where("visible", "==", true)
+    .orderBy("createdDate","desc")
     .get();
 
   return videosRef;
