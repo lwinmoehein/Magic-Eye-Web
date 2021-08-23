@@ -271,7 +271,7 @@ export function fetchVideos(payload) {
           return { ...doc.data(), id: doc.id };
         });
         
-        payload=payload.filter(v=>v.visibility);
+        payload=payload.filter(v=>v.visible);
 
         console.log("video:", payload);
         dispatch(fetchVideosSuccess(payload));
