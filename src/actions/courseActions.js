@@ -270,6 +270,9 @@ export function fetchVideos(payload) {
         let payload = querySnapshot.docs.map((doc) => {
           return { ...doc.data(), id: doc.id };
         });
+        
+        payload=payload.filter(v=>!v.visibility);
+
         console.log("video:", payload);
         dispatch(fetchVideosSuccess(payload));
       })
