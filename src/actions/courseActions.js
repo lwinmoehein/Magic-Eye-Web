@@ -214,7 +214,8 @@ function fetchPDFsAPI(courseId, courseContentId) {
     .collection("PdfByContent")
     .doc(courseId)
     .collection(courseContentId)
-    .where("visible", "==", true)
+    //.where("visible", "==", true)
+    .orderBy("createdDate","desc")
     .get();
 
   return pdfsRef;
@@ -226,7 +227,8 @@ function fetchLinksAPI(courseId, courseContentId) {
     .collection("LinkByContent")
     .doc(courseId)
     .collection(courseContentId)
-    .where("visible", "==", true)
+   // .where("visible", "==", true)
+   .orderBy("createdDate","desc")
     .get();
 
   return pdfsRef;
