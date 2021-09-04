@@ -260,6 +260,7 @@ export function fetchVideos(payload) {
     return fetchVideosAPI(payload.courseId, payload.contentId)
       .then((querySnapshot) => {
         let payload = querySnapshot.docs.map((doc) => {
+          console.log(doc.data());
           return { ...doc.data(), id: doc.id };
         });
 
