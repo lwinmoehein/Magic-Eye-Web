@@ -30,6 +30,7 @@ import {
 import FirebaseConfig from "../config/FirebaseConfig";
 import { firebase } from "@firebase/app";
 import "@firebase/firestore";
+import { toggleProgress } from ".";
 
 if (!firebase.apps.length) {
   firebase.initializeApp(FirebaseConfig);
@@ -177,8 +178,6 @@ function getCatalogsAPI() {
   return catalogsRef.get();
 }
 function getCoursesAPI(user) {
-  console.log("fetching user data", user);
-
   let courseByStudentRef = db.collection("CourseByStudent");
   if (user) {
     const userPhone = user.phoneNumber.replace("+959", "09");
@@ -189,7 +188,6 @@ function getCoursesAPI(user) {
   return courseByStudentRef.get();
 }
 function getCourseContentsAPI(courseId) {
-  console.log("course id is", courseId);
   let courseContentRef = db
     .collection("dataByCourse")
     .doc(courseId)
@@ -198,22 +196,20 @@ function getCourseContentsAPI(courseId) {
   return courseContentRef;
 }
 function fetchVideosAPI(courseId, courseContentId) {
-  console.log("content:", courseContentId, "course", courseId);
   let videosRef = db
     .collection("VideoByContent")
-    .doc(courseId)
-    .collection(courseContentId)
+    .doc(courseId.trim())
+    .collection(courseContentId.trim())
     .where("visible", "==", true)
     .get();
 
   return videosRef;
 }
 function fetchPDFsAPI(courseId, courseContentId) {
-  console.log("content:", courseContentId, "course", courseId);
   let pdfsRef = db
     .collection("PdfByContent")
-    .doc(courseId)
-    .collection(courseContentId)
+    .doc(courseId.trim())
+    .collection(courseContentId.trim())
     .where("visible", "==", true)
     .get();
 
@@ -221,11 +217,10 @@ function fetchPDFsAPI(courseId, courseContentId) {
 }
 
 function fetchLinksAPI(courseId, courseContentId) {
-  console.log("content:", courseContentId, "course", courseId);
   let pdfsRef = db
     .collection("LinkByContent")
-    .doc(courseId)
-    .collection(courseContentId)
+    .doc(courseId.trim())
+    .collection(courseContentId.trim())
     .where("visible", "==", true)
     .get();
 
@@ -234,18 +229,16 @@ function fetchLinksAPI(courseId, courseContentId) {
 
 function fetchUserInfoAPI(user) {
   const phoneNumber = user.phoneNumber.replace("+959", "09");
-  console.log("getting user info", phoneNumber);
   let userRef = db.collection("students").doc(phoneNumber).get();
 
   return userRef;
 }
 //course contents
 export function fetchCourseContents(courseId) {
-  console.log("fetching course contents:=>", courseId);
   return (dispatch, getState) => {
     dispatch(fetchCourseContentsBegin());
     const user = getState().app.user;
-    return getCourseContentsAPI(courseId)
+    return getCourseContentsAPI(courseId.trim())
       .then((querySnapshot) => {
         dispatch(
           fetchCourseContentsSuccess(
@@ -260,7 +253,6 @@ export function fetchCourseContents(courseId) {
 }
 //videos
 export function fetchVideos(payload) {
-  console.log("fetching videos:=>", payload.courseId, ",", payload.contentId);
   return (dispatch, getState) => {
     dispatch(fetchVideosBegin());
     return fetchVideosAPI(payload.courseId, payload.contentId)
@@ -268,7 +260,6 @@ export function fetchVideos(payload) {
         let payload = querySnapshot.docs.map((doc) => {
           return { ...doc.data(), id: doc.id };
         });
-        console.log("video:", payload);
         dispatch(fetchVideosSuccess(payload));
       })
       .catch((error) => dispatch(fetchVideosFailure()));
@@ -277,7 +268,6 @@ export function fetchVideos(payload) {
 
 //videos
 export function fetchPDFs(payload) {
-  console.log("fetching pdfs:=>", payload.courseId, ",", payload.contentId);
   return (dispatch, getState) => {
     dispatch(fetchPDFsBegin());
     return fetchPDFsAPI(payload.courseId, payload.contentId)
@@ -285,7 +275,6 @@ export function fetchPDFs(payload) {
         let payload = querySnapshot.docs.map((doc) => {
           return { ...doc.data(), id: doc.id };
         });
-        console.log("pdfs:", payload);
         dispatch(fetchPDFsSuccess(payload));
       })
       .catch((error) => dispatch(fetchPDFsFailure()));
@@ -294,7 +283,6 @@ export function fetchPDFs(payload) {
 
 //links
 export function fetchLinks(payload) {
-  console.log("fetching links:=>", payload.courseId, ",", payload.contentId);
   return (dispatch, getState) => {
     dispatch(fetchLinksBegin());
     return fetchLinksAPI(payload.courseId, payload.contentId)
@@ -302,7 +290,6 @@ export function fetchLinks(payload) {
         let payload = querySnapshot.docs.map((doc) => {
           return { ...doc.data(), id: doc.id };
         });
-        console.log("pdfs:", payload);
         dispatch(fetchLinksSuccess(payload));
       })
       .catch((error) => dispatch(fetchLinksFailure()));
@@ -310,11 +297,9 @@ export function fetchLinks(payload) {
 }
 
 export function fetchCourses() {
-  console.log("fetching courses");
   return (dispatch, getState) => {
     dispatch(fetchCoursesBegin());
     dispatch(clearCourses());
-    console.log("user from local storage", localStorage.getItem("user"));
     let user =
       firebase.auth().currentUser ??
       getState("app").user ??
@@ -323,21 +308,27 @@ export function fetchCourses() {
     return getCoursesAPI(user)
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          const courseRef = db.collection("courses").doc(doc.id);
+          console.log("course id", doc.id);
+
+          const courseRef = db.collection("courses").doc(doc.id.trim());
+
           courseRef.get().then((querySnapshot) => {
-            console.log("course data", querySnapshot.data());
-            dispatch(
-              fetchCoursesSuccess({ ...querySnapshot.data(), id: doc.id })
-            );
+            if (querySnapshot.exists) {
+              dispatch(
+                fetchCoursesSuccess({ ...querySnapshot.data(), id: doc.id })
+              );
+            } else {
+            }
           });
         });
+        //disable progress finally
+        dispatch(toggleProgress(false));
       })
       .catch((error) => dispatch(fetchCoursesFailure(error)));
   };
 }
 
 export function fetchCatalogs() {
-  console.log("fetching catalogs");
   return (dispatch, getState) => {
     dispatch(fetchCatalogsBegin());
 
@@ -346,7 +337,6 @@ export function fetchCatalogs() {
         let catalogs = querySnapshot.docs.map((doc) => {
           return { ...doc.data(), id: doc.id };
         });
-        console.log("catalogs:", catalogs);
         dispatch(fetchCatalogsSuccess(catalogs));
       })
       .catch((error) => dispatch(fetchCatalogsFailure(error)));
@@ -354,7 +344,6 @@ export function fetchCatalogs() {
 }
 
 export function fetchUserInfo() {
-  console.log("fetching user info");
   return (dispatch, getState) => {
     dispatch(fetchUserInfoBegin());
     let user =
@@ -364,7 +353,6 @@ export function fetchUserInfo() {
 
     return fetchUserInfoAPI(user)
       .then((doc) => {
-        console.log("user data:", doc.data());
         dispatch(fetchUserInfoSuccess(doc.data()));
       })
       .catch((error) => dispatch(fetchUserInfoFailure(error)));

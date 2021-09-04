@@ -79,8 +79,6 @@ function app(state = defaultAppState, action) {
         user: null,
       };
     case STORE_USER:
-      console.log("storing user:" + action.payload.phoneNumber);
-
       return {
         ...state,
         user: action.payload,

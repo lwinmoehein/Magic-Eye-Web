@@ -30,7 +30,6 @@ export function logOut() {
 
 export function storeUser(payload) {
   localStorage.setItem("user", JSON.stringify(payload));
-  console.log("user stored on local storage", payload);
   return { type: STORE_USER, payload };
 }
 
