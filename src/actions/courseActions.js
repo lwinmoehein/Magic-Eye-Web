@@ -199,8 +199,8 @@ function fetchVideosAPI(courseId, courseContentId) {
   let videosRef = db
     .collection("VideoByContent")
     .doc(courseId.trim())
-    .collection(courseContentId.trim())
-    .where("visible", "==", true)
+    .collection(courseContentId)
+    .orderBy("createdDate", "asc")
     .get();
 
   return videosRef;
@@ -210,7 +210,8 @@ function fetchPDFsAPI(courseId, courseContentId) {
     .collection("PdfByContent")
     .doc(courseId.trim())
     .collection(courseContentId.trim())
-    .where("visible", "==", true)
+    //.where("visible", "==", true)
+    .orderBy("createdDate", "asc")
     .get();
 
   return pdfsRef;
@@ -221,6 +222,7 @@ function fetchLinksAPI(courseId, courseContentId) {
     .collection("LinkByContent")
     .doc(courseId.trim())
     .collection(courseContentId.trim())
+    .orderBy("createdDate", "asc")
     .where("visible", "==", true)
     .get();
 
@@ -260,6 +262,10 @@ export function fetchVideos(payload) {
         let payload = querySnapshot.docs.map((doc) => {
           return { ...doc.data(), id: doc.id };
         });
+
+        payload = payload.filter((v) => v.visible);
+
+        console.log("video:", payload);
         dispatch(fetchVideosSuccess(payload));
       })
       .catch((error) => dispatch(fetchVideosFailure()));
@@ -275,6 +281,9 @@ export function fetchPDFs(payload) {
         let payload = querySnapshot.docs.map((doc) => {
           return { ...doc.data(), id: doc.id };
         });
+        payload = payload.filter((pdf) => pdf.visible);
+
+        console.log("pdfs:", payload);
         dispatch(fetchPDFsSuccess(payload));
       })
       .catch((error) => dispatch(fetchPDFsFailure()));
@@ -290,6 +299,10 @@ export function fetchLinks(payload) {
         let payload = querySnapshot.docs.map((doc) => {
           return { ...doc.data(), id: doc.id };
         });
+
+        payload = payload.filter((link) => link.visible);
+
+        console.log("pdfs:", payload);
         dispatch(fetchLinksSuccess(payload));
       })
       .catch((error) => dispatch(fetchLinksFailure()));
