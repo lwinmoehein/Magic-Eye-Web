@@ -26,7 +26,7 @@ function PDFs(props) {
         <div className="videos">
           <div className="videosWrapper">
             {props.pdfs.map((pdf) => {
-              return <PDF pdf={pdf}></PDF>;
+              return <PDF key={pdf.id} pdf={pdf}></PDF>;
             })}
           </div>
         </div>

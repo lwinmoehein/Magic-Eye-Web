@@ -27,7 +27,7 @@ function Links(props) {
         <div className="videos">
           <div className="videosWrapper">
             {props.links.map((link) => {
-              return <ResourceLink link={link} />;
+              return <ResourceLink key={link.id} link={link} />;
             })}
           </div>
         </div>

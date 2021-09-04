@@ -29,7 +29,7 @@ function Videos(props) {
         <div className="videos">
           <div className="videosWrapper">
             {props.videos.map((video) => {
-              return <Video video={video}></Video>;
+              return <Video key={video.id} video={video}></Video>;
             })}
           </div>
         </div>

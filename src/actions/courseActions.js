@@ -264,8 +264,6 @@ export function fetchVideos(payload) {
         });
 
         payload = payload.filter((v) => v.visible);
-
-        console.log("video:", payload);
         dispatch(fetchVideosSuccess(payload));
       })
       .catch((error) => dispatch(fetchVideosFailure()));
@@ -282,8 +280,6 @@ export function fetchPDFs(payload) {
           return { ...doc.data(), id: doc.id };
         });
         payload = payload.filter((pdf) => pdf.visible);
-
-        console.log("pdfs:", payload);
         dispatch(fetchPDFsSuccess(payload));
       })
       .catch((error) => dispatch(fetchPDFsFailure()));
@@ -302,7 +298,6 @@ export function fetchLinks(payload) {
 
         payload = payload.filter((link) => link.visible);
 
-        console.log("pdfs:", payload);
         dispatch(fetchLinksSuccess(payload));
       })
       .catch((error) => dispatch(fetchLinksFailure()));
@@ -321,8 +316,6 @@ export function fetchCourses() {
     return getCoursesAPI(user)
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          console.log("course id", doc.id);
-
           const courseRef = db.collection("courses").doc(doc.id.trim());
 
           courseRef.get().then((querySnapshot) => {
